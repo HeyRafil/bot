@@ -255,36 +255,46 @@ export function initWhatsAppClient() {
                 }
                 if (!msg) return { error: `Message not found in collections.Msg using either ${serializedId} or ${cleanId}` };
                 
-                // Extract poll-related properties
-                const pollProps: any = {
-                  foundId,
-                  type: msg.type,
-                  pollName: msg.pollName,
-                  pollOptions: msg.pollOptions,
-                  rawKeys: Object.keys(msg).filter(k => k.toLowerCase().includes('poll') || k.toLowerCase().includes('vote'))
-                };
+                // Walk the prototype chain of msg to find any methods or properties related to poll or vote
+                const msgKeys: string[] = [];
+                let currentObj = msg;
+                while (currentObj && currentObj !== Object.prototype) {
+                  Object.getOwnPropertyNames(currentObj).forEach(k => {
+                    if (!msgKeys.includes(k) && (k.toLowerCase().includes('poll') || k.toLowerCase().includes('vote'))) {
+                      msgKeys.push(k);
+                    }
+                  });
+                  currentObj = Object.getPrototypeOf(currentObj);
+                }
 
-                // Check for vote properties
-                if (msg.pollVotes) {
-                  pollProps.pollVotesType = typeof msg.pollVotes;
-                  pollProps.pollVotesKeys = Object.keys(msg.pollVotes);
-                  if (typeof msg.pollVotes.toArray === 'function') {
-                    const votesArr = msg.pollVotes.toArray();
-                    pollProps.pollVotesLength = votesArr.length;
-                    pollProps.pollVotesData = votesArr.map((v: any) => ({
-                      sender: v.sender || v.author || v.voter || (v.id && v.id.participant) || (v.id && v.id.user),
-                      selectedOptions: v.selectedOptions || v.selectedOptionLocalIds
-                    }));
-                  } else if (Array.isArray(msg.pollVotes)) {
-                    pollProps.pollVotesLength = msg.pollVotes.length;
-                    pollProps.pollVotesData = msg.pollVotes.map((v: any) => ({
-                      sender: v.sender || v.author || v.voter,
-                      selectedOptions: v.selectedOptions || v.selectedOptionLocalIds
-                    }));
+                // Check values of these keys
+                const keyValues: any = {};
+                for (const key of msgKeys) {
+                  try {
+                    const val = msg[key];
+                    if (typeof val === 'function') {
+                      keyValues[key] = 'function';
+                    } else if (typeof val === 'object' && val) {
+                      keyValues[key] = {
+                        type: 'object',
+                        constructor: val.constructor ? val.constructor.name : null,
+                        keys: Object.keys(val).slice(0, 10),
+                        length: typeof val.toArray === 'function' ? val.toArray().length : (val.length || null)
+                      };
+                    } else {
+                      keyValues[key] = val;
+                    }
+                  } catch (e: any) {
+                    keyValues[key] = `Error reading: ${e.message}`;
                   }
                 }
 
-                return pollProps;
+                return {
+                  foundId,
+                  msgKeys,
+                  keyValues,
+                  collectionNames: Object.keys(collections)
+                };
               } catch (err: any) {
                 return { error: err.message || err.toString() };
               }
