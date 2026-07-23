@@ -244,25 +244,26 @@ export function initWhatsAppClient() {
             const pollVoteCollectionData = await client.pupPage.evaluate(async () => {
               try {
                 const collections = (window as any).require('WAWebCollections');
-                if (!collections || !collections.PollVote) return { error: "No PollVote collection found" };
-                const votes = collections.PollVote.toArray();
-                return votes.map((v: any) => {
-                  return {
-                    id: v.id ? (v.id._serialized || v.id.toString() || JSON.stringify(v.id)) : null,
-                    parentMsgKey: v.parentMsgKey ? (v.parentMsgKey._serialized || v.parentMsgKey.toString() || JSON.stringify(v.parentMsgKey)) : null,
-                    sender: v.sender ? (typeof v.sender === 'object' ? (v.sender._serialized || v.sender.toString()) : v.sender) : null,
-                    selectedOptionLocalIds: v.selectedOptionLocalIds ? Array.from(new Uint8Array(v.selectedOptionLocalIds)) : null,
-                    selectedOptions: v.selectedOptions || null,
-                    keys: Object.keys(v)
-                  };
+                if (!collections || !collections.Msg) return { error: "No Msg collection found" };
+                const msgs = collections.Msg.toArray();
+                const pollRelated = msgs.filter((m: any) => {
+                  const type = m.type || '';
+                  return type.toLowerCase().includes('poll') || type.toLowerCase().includes('vote');
                 });
+                return pollRelated.map((m: any) => ({
+                  id: m.id?._serialized,
+                  type: m.type,
+                  parentMsgKey: m.pollUpdateParentKey?._serialized || m.parentMsgKey?._serialized,
+                  sender: m.sender || m.author || m.from,
+                  selectedOptions: m.pollOptions || m.selectedOptions
+                }));
               } catch (err: any) {
                 return { error: err.message || err.toString() };
               }
             });
-            logger.info(`[PollMenuCheck] Debug PollVote Collection: ${JSON.stringify(pollVoteCollectionData)}`);
+            logger.info(`[PollMenuCheck] Debug PollRelated Messages: ${JSON.stringify(pollVoteCollectionData)}`);
           } catch (err: any) {
-            logger.error(`[PollMenuCheck] Debug PollVote error: ${err.message}`);
+            logger.error(`[PollMenuCheck] Debug PollRelated error: ${err.message}`);
           }
 
           // Directly query poll votes from Puppeteer browser database to avoid MsgKey serialization bugs in library
