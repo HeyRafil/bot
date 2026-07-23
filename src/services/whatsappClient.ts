@@ -235,26 +235,38 @@ export function initWhatsAppClient() {
               const table = window.require('WAWebPollsVotesSchema').getTable();
               const pollVotes = await table.equals(['parentMsgKey'], msgKey.toString());
               
-              return pollVotes.map((item: any) => {
-                const typedArray = new Uint8Array(item.selectedOptionLocalIds);
-                const rawSender = item.sender || item.author;
-                const voterJid = typeof rawSender === 'object' && rawSender ? (rawSender._serialized || rawSender.toString()) : rawSender;
-                return {
-                  voter: voterJid,
-                  selectedOptionLocalIds: Array.from(typedArray)
-                };
-              });
-            } catch (_) {
-              return [];
+              return {
+                success: true,
+                votes: pollVotes.map((item: any) => {
+                  const typedArray = new Uint8Array(item.selectedOptionLocalIds);
+                  const rawSender = item.sender || item.author;
+                  const voterJid = typeof rawSender === 'object' && rawSender ? (rawSender._serialized || rawSender.toString()) : rawSender;
+                  return {
+                    voter: voterJid,
+                    selectedOptionLocalIds: Array.from(typedArray)
+                  };
+                })
+              };
+            } catch (err: any) {
+              return {
+                success: false,
+                error: err.message || err.toString()
+              };
             }
           }, menu.messageId);
 
-          if (votes && votes.length > 0) {
-            logger.info(`[PollMenuCheck] Poll ${menu.messageId} has ${votes.length} votes.`);
+          if (votes && !votes.success) {
+            logger.error(`[PollMenuCheck] Browser evaluation error for poll ${menu.messageId}: ${votes.error}`);
+            continue;
           }
-          if (!votes || votes.length === 0) continue;
 
-          for (const vote of votes) {
+          const voteList = votes?.votes || [];
+          if (voteList.length > 0) {
+            logger.info(`[PollMenuCheck] Poll ${menu.messageId} has ${voteList.length} votes.`);
+          }
+          if (voteList.length === 0) continue;
+
+          for (const vote of voteList) {
             const voterJid = vote.voter;
             if (!voterJid || menu.votedUserJids.has(voterJid)) continue;
 
