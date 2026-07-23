@@ -228,6 +228,13 @@ export function initWhatsAppClient() {
         try {
           if (!client.pupPage) continue;
 
+          // Open chat window in background to force the browser to load and sync new poll votes
+          try {
+            if (client.interface && typeof client.interface.openChatWindow === 'function') {
+              await client.interface.openChatWindow(menu.chatId);
+            }
+          } catch (_) {}
+
           // Directly query poll votes from Puppeteer browser database to avoid MsgKey serialization bugs in library
           const votes = await client.pupPage.evaluate(async (serializedId: string) => {
             try {
