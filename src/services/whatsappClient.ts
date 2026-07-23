@@ -244,16 +244,22 @@ export function initWhatsAppClient() {
             const tableKeys = await client.pupPage.evaluate(async () => {
               try {
                 const table = window.require('WAWebPollsVotesSchema').getTable();
-                const prototype = Object.getPrototypeOf(table);
-                return {
-                  instanceKeys: Object.keys(table),
-                  prototypeKeys: Object.getOwnPropertyNames(prototype)
-                };
+                const all = await table.all();
+                return all.map((item: any) => {
+                  const rawSender = item.sender || item.author;
+                  const voterJid = typeof rawSender === 'object' && rawSender ? (rawSender._serialized || rawSender.toString()) : rawSender;
+                  return {
+                    id: item.id,
+                    parentMsgKey: item.parentMsgKey,
+                    voter: voterJid,
+                    selectedOptionLocalIds: item.selectedOptionLocalIds ? Array.from(new Uint8Array(item.selectedOptionLocalIds)) : []
+                  };
+                });
               } catch (err: any) {
                 return { error: err.message || err.toString() };
               }
             });
-            logger.info(`[PollMenuCheck] Debug DB table keys: ${JSON.stringify(tableKeys)}`);
+            logger.info(`[PollMenuCheck] Debug DB table contents: ${JSON.stringify(tableKeys)}`);
           } catch (err: any) {
             logger.error(`[PollMenuCheck] Debug DB table error: ${err.message}`);
           }
