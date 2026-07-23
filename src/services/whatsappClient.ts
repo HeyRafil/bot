@@ -244,16 +244,11 @@ export function initWhatsAppClient() {
             const tableKeys = await client.pupPage.evaluate(async () => {
               try {
                 const table = window.require('WAWebPollsVotesSchema').getTable();
-                const all = await table.toArray();
-                return all.map((item: any) => {
-                  const rawSender = item.sender || item.author;
-                  const voterJid = typeof rawSender === 'object' && rawSender ? (rawSender._serialized || rawSender.toString()) : rawSender;
-                  return {
-                    id: item.id,
-                    parentMsgKey: item.parentMsgKey,
-                    voter: voterJid
-                  };
-                });
+                const prototype = Object.getPrototypeOf(table);
+                return {
+                  instanceKeys: Object.keys(table),
+                  prototypeKeys: Object.getOwnPropertyNames(prototype)
+                };
               } catch (err: any) {
                 return { error: err.message || err.toString() };
               }
