@@ -241,67 +241,28 @@ export function initWhatsAppClient() {
 
           // Debug: print current keys in WAWebPollsVotesSchema to confirm key matching format
           try {
-            const msgProps = await client.pupPage.evaluate(async (serializedId: string, cleanId: string) => {
+            const pollVoteCollectionData = await client.pupPage.evaluate(async () => {
               try {
                 const collections = (window as any).require('WAWebCollections');
-                if (!collections || !collections.Msg) return { error: "No Msg collection found" };
-                
-                // Try to find the message by either serializedId or cleanId
-                let msg = collections.Msg.get(serializedId);
-                let foundId = serializedId;
-                if (!msg) {
-                  msg = collections.Msg.get(cleanId);
-                  foundId = cleanId;
-                }
-                if (!msg) return { error: `Message not found in collections.Msg using either ${serializedId} or ${cleanId}` };
-                
-                // Walk the prototype chain of msg to find any methods or properties related to poll or vote
-                const msgKeys: string[] = [];
-                let currentObj = msg;
-                while (currentObj && currentObj !== Object.prototype) {
-                  Object.getOwnPropertyNames(currentObj).forEach(k => {
-                    if (!msgKeys.includes(k) && (k.toLowerCase().includes('poll') || k.toLowerCase().includes('vote'))) {
-                      msgKeys.push(k);
-                    }
-                  });
-                  currentObj = Object.getPrototypeOf(currentObj);
-                }
-
-                // Check values of these keys
-                const keyValues: any = {};
-                for (const key of msgKeys) {
-                  try {
-                    const val = msg[key];
-                    if (typeof val === 'function') {
-                      keyValues[key] = 'function';
-                    } else if (typeof val === 'object' && val) {
-                      keyValues[key] = {
-                        type: 'object',
-                        constructor: val.constructor ? val.constructor.name : null,
-                        keys: Object.keys(val).slice(0, 10),
-                        length: typeof val.toArray === 'function' ? val.toArray().length : (val.length || null)
-                      };
-                    } else {
-                      keyValues[key] = val;
-                    }
-                  } catch (e: any) {
-                    keyValues[key] = `Error reading: ${e.message}`;
-                  }
-                }
-
-                return {
-                  foundId,
-                  msgKeys,
-                  keyValues,
-                  collectionNames: Object.keys(collections)
-                };
+                if (!collections || !collections.PollVote) return { error: "No PollVote collection found" };
+                const votes = collections.PollVote.toArray();
+                return votes.map((v: any) => {
+                  return {
+                    id: v.id ? (v.id._serialized || v.id.toString() || JSON.stringify(v.id)) : null,
+                    parentMsgKey: v.parentMsgKey ? (v.parentMsgKey._serialized || v.parentMsgKey.toString() || JSON.stringify(v.parentMsgKey)) : null,
+                    sender: v.sender ? (typeof v.sender === 'object' ? (v.sender._serialized || v.sender.toString()) : v.sender) : null,
+                    selectedOptionLocalIds: v.selectedOptionLocalIds ? Array.from(new Uint8Array(v.selectedOptionLocalIds)) : null,
+                    selectedOptions: v.selectedOptions || null,
+                    keys: Object.keys(v)
+                  };
+                });
               } catch (err: any) {
                 return { error: err.message || err.toString() };
               }
-            }, menu.messageId, cleanMessageId);
-            logger.info(`[PollMenuCheck] Debug Msg properties: ${JSON.stringify(msgProps)}`);
+            });
+            logger.info(`[PollMenuCheck] Debug PollVote Collection: ${JSON.stringify(pollVoteCollectionData)}`);
           } catch (err: any) {
-            logger.error(`[PollMenuCheck] Debug Msg error: ${err.message}`);
+            logger.error(`[PollMenuCheck] Debug PollVote error: ${err.message}`);
           }
 
           // Directly query poll votes from Puppeteer browser database to avoid MsgKey serialization bugs in library
