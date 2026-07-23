@@ -226,7 +226,29 @@ export function initWhatsAppClient() {
 
       for (const menu of activePollMenus) {
         try {
-          const votes = await client.getPollVotes(menu.messageId);
+          if (!client.pupPage) continue;
+
+          // Directly query poll votes from Puppeteer browser database to avoid MsgKey serialization bugs in library
+          const votes = await client.pupPage.evaluate(async (serializedId: string) => {
+            try {
+              const msgKey = window.require('WAWebMsgKey').fromString(serializedId);
+              const table = window.require('WAWebPollsVotesSchema').getTable();
+              const pollVotes = await table.equals(['parentMsgKey'], msgKey.toString());
+              
+              return pollVotes.map((item: any) => {
+                const typedArray = new Uint8Array(item.selectedOptionLocalIds);
+                const rawSender = item.sender || item.author;
+                const voterJid = typeof rawSender === 'object' && rawSender ? (rawSender._serialized || rawSender.toString()) : rawSender;
+                return {
+                  voter: voterJid,
+                  selectedOptionLocalIds: Array.from(typedArray)
+                };
+              });
+            } catch (_) {
+              return [];
+            }
+          }, menu.messageId);
+
           if (votes && votes.length > 0) {
             logger.info(`[PollMenuCheck] Poll ${menu.messageId} has ${votes.length} votes.`);
           }
@@ -234,18 +256,15 @@ export function initWhatsAppClient() {
 
           for (const vote of votes) {
             const voterJid = vote.voter;
-            if (menu.votedUserJids.has(voterJid)) continue;
+            if (!voterJid || menu.votedUserJids.has(voterJid)) continue;
 
-            if (vote.selectedOptions && vote.selectedOptions.length > 0) {
-              const selected = vote.selectedOptions[0];
-              const localId = selected.localId;
-              const name = selected.name || '';
-
+            if (vote.selectedOptionLocalIds && vote.selectedOptionLocalIds.length > 0) {
+              const localId = vote.selectedOptionLocalIds[0];
               const voterNum = voterJid.split('@')[0];
               const mentionStr = `@${voterNum}`;
               let responseText = '';
 
-              if (localId === 0 || name.includes('Info')) {
+              if (localId === 0) {
                 responseText = `🏢 *INFO AKADEMIK UT* 🏢\n\n`;
                 responseText += `Halo ${mentionStr}, berikut daftar perintah informasi akademik:\n\n`;
                 responseText += `- *.infout* : Pusat info umum UT Batam.\n`;
@@ -258,7 +277,7 @@ export function initWhatsAppClient() {
                 responseText += `- *.salut* : Daftar Sentra Layanan UT Riau.\n`;
                 responseText += `- *.kontak* : Hubungi Helpdesk UT Batam & Pusat.\n\n`;
                 responseText += `💡 _Ketik perintah di atas untuk info lebih lanjut._`;
-              } else if (localId === 1 || name.includes('Tuton')) {
+              } else if (localId === 1) {
                 responseText = `💻 *TUTON & SISTEM BELAJAR* 💻\n\n`;
                 responseText += `Halo ${mentionStr}, berikut rincian sistem pembelajaran UT:\n\n`;
                 responseText += `- *.tuton* : Kuliah online (E-Learning) & tugas wajib (Smt 3, 5, 7).\n`;
@@ -267,7 +286,7 @@ export function initWhatsAppClient() {
                 responseText += `- *.lpkbjj* : Pelatihan kesiapan belajar mandiri mahasiswa baru.\n`;
                 responseText += `- *.sks* : Aturan pengambilan SKS & batas IP semester.\n`;
                 responseText += `- *.nilai* : Panduan cek nilai DNU/LKAM & bobot Tuton.\n`;
-              } else if (localId === 2 || name.includes('Game')) {
+              } else if (localId === 2) {
                 responseText = `🎮 *GAME ARENA & PvP RPG* 🎮\n\n`;
                 responseText += `Halo ${mentionStr}, berikut perintah game arena di bot:\n\n`;
                 responseText += `- *.fight <pemain1> <pemain2>* : Memulai pertarungan RPG PvP real-time.\n`;
@@ -276,7 +295,7 @@ export function initWhatsAppClient() {
                 responseText += `- *.ttt* : Memulai game Tic Tac Toe interaktif.\n`;
                 responseText += `- *.catur* : Bermain catur kelompok atau lawan AI.\n`;
                 responseText += `- *.ping* : Cek kecepatan respon bot.\n`;
-              } else if (localId === 3 || name.includes('Admin') || name.includes('Moderator')) {
+              } else if (localId === 3) {
                 responseText = `🛡️ *ADMIN & MODERATOR GRUP* 🛡️\n\n`;
                 responseText += `Halo ${mentionStr}, berikut perintah khusus pengelola grup:\n\n`;
                 responseText += `- *.warn @user* : Memberikan peringatan ke member.\n`;
@@ -285,7 +304,7 @@ export function initWhatsAppClient() {
                 responseText += `- *.promote / .demote* : Mengatur jabatan admin grup.\n`;
                 responseText += `- *.mute / .unmute* : Membuka/menutup izin chat grup.\n`;
                 responseText += `- *.tagall* : Mentag seluruh anggota grup sekaligus.\n`;
-              } else if (localId === 4 || name.includes('Tampilkan') || name.includes('Semua')) {
+              } else if (localId === 4) {
                 responseText = `📜 *DAFTAR PERINTAH LENGKAP* 📜\n\n`;
                 responseText += `Halo ${mentionStr}, berikut ringkasan seluruh perintah bot:\n\n`;
                 responseText += `*Umum*: .menu, .infout, .registrasi, .panduan, .prodi, .syarat, .lpkbjj, .biaya, .tbo, .tuton, .sks, .nilai, .kalender, .salut, .kontak, .status\n\n`;
