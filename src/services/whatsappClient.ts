@@ -11,6 +11,7 @@ import logger from '../utils/logger.js';
 import { handleMessage } from '../handlers/messageHandler.js';
 import prisma from '../database/prisma.js';
 import pluginManager from '../utils/pluginManager.js';
+import { activePollMenus } from '../utils/pollStore.js';
 
 declare let window: any;
 
@@ -207,6 +208,105 @@ export function initWhatsAppClient() {
     emitStatusUpdate();
     logToDashboard('Login', `WhatsApp Bot is READY as ${botState.botUser}`);
 
+    // Background loop to poll active poll menu votes (workaround for unstable vote_update event)
+    let checkCount = 0;
+    setInterval(async () => {
+      checkCount++;
+      if (checkCount % 4 === 0) {
+        logger.info(`[PollMenuCheck] Heartbeat: ${activePollMenus.length} active menu polls in memory.`);
+      }
+      if (activePollMenus.length === 0) return;
+      
+      const now = Date.now();
+      // Remove polls older than 10 minutes (600,000 ms)
+      const expiredIndex = activePollMenus.findIndex(p => now - p.createdAt > 600000);
+      if (expiredIndex !== -1) {
+        activePollMenus.splice(expiredIndex, 1);
+      }
+
+      for (const menu of activePollMenus) {
+        try {
+          const votes = await client.getPollVotes(menu.messageId);
+          if (votes && votes.length > 0) {
+            logger.info(`[PollMenuCheck] Poll ${menu.messageId} has ${votes.length} votes.`);
+          }
+          if (!votes || votes.length === 0) continue;
+
+          for (const vote of votes) {
+            const voterJid = vote.voter;
+            if (menu.votedUserJids.has(voterJid)) continue;
+
+            if (vote.selectedOptions && vote.selectedOptions.length > 0) {
+              const selected = vote.selectedOptions[0];
+              const localId = selected.localId;
+              const name = selected.name || '';
+
+              const voterNum = voterJid.split('@')[0];
+              const mentionStr = `@${voterNum}`;
+              let responseText = '';
+
+              if (localId === 0 || name.includes('Info')) {
+                responseText = `🏢 *INFO AKADEMIK UT* 🏢\n\n`;
+                responseText += `Halo ${mentionStr}, berikut daftar perintah informasi akademik:\n\n`;
+                responseText += `- *.infout* : Pusat info umum UT Batam.\n`;
+                responseText += `- *.registrasi* : Panduan pendaftaran maba & registrasi mata kuliah.\n`;
+                responseText += `- *.panduan* : Peta jalan kuliah Semester 1 - 8.\n`;
+                responseText += `- *.prodi* : Daftar Program Studi S1/Diploma.\n`;
+                responseText += `- *.syarat* : Berkas persyaratan pendaftaran.\n`;
+                responseText += `- *.biaya* : Rincian SPP/uang kuliah (SIPAS vs Non-SIPAS).\n`;
+                responseText += `- *.kalender* : Kalender akademik & batas tanggal penting.\n`;
+                responseText += `- *.salut* : Daftar Sentra Layanan UT Riau.\n`;
+                responseText += `- *.kontak* : Hubungi Helpdesk UT Batam & Pusat.\n\n`;
+                responseText += `💡 _Ketik perintah di atas untuk info lebih lanjut._`;
+              } else if (localId === 1 || name.includes('Tuton')) {
+                responseText = `💻 *TUTON & SISTEM BELAJAR* 💻\n\n`;
+                responseText += `Halo ${mentionStr}, berikut rincian sistem pembelajaran UT:\n\n`;
+                responseText += `- *.tuton* : Kuliah online (E-Learning) & tugas wajib (Smt 3, 5, 7).\n`;
+                responseText += `- *.tuweb* : Kuliah tatap muka virtual via MS Teams.\n`;
+                responseText += `- *.tbo* : Panduan beli modul & baca Buku Materi Pokok online gratis.\n`;
+                responseText += `- *.lpkbjj* : Pelatihan kesiapan belajar mandiri mahasiswa baru.\n`;
+                responseText += `- *.sks* : Aturan pengambilan SKS & batas IP semester.\n`;
+                responseText += `- *.nilai* : Panduan cek nilai DNU/LKAM & bobot Tuton.\n`;
+              } else if (localId === 2 || name.includes('Game')) {
+                responseText = `🎮 *GAME ARENA & PvP RPG* 🎮\n\n`;
+                responseText += `Halo ${mentionStr}, berikut perintah game arena di bot:\n\n`;
+                responseText += `- *.fight <pemain1> <pemain2>* : Memulai pertarungan RPG PvP real-time.\n`;
+                responseText += `  _Contoh:_ \`.fight Andi Budi\`\n`;
+                responseText += `- *.fight leaderboard* : Papan peringkat juara pertarungan.\n`;
+                responseText += `- *.ttt* : Memulai game Tic Tac Toe interaktif.\n`;
+                responseText += `- *.catur* : Bermain catur kelompok atau lawan AI.\n`;
+                responseText += `- *.ping* : Cek kecepatan respon bot.\n`;
+              } else if (localId === 3 || name.includes('Admin') || name.includes('Moderator')) {
+                responseText = `🛡️ *ADMIN & MODERATOR GRUP* 🛡️\n\n`;
+                responseText += `Halo ${mentionStr}, berikut perintah khusus pengelola grup:\n\n`;
+                responseText += `- *.warn @user* : Memberikan peringatan ke member.\n`;
+                responseText += `- *.warnings @user* : Cek jumlah peringatan member.\n`;
+                responseText += `- *.kick @user* : Mengeluarkan member dari grup.\n`;
+                responseText += `- *.promote / .demote* : Mengatur jabatan admin grup.\n`;
+                responseText += `- *.mute / .unmute* : Membuka/menutup izin chat grup.\n`;
+                responseText += `- *.tagall* : Mentag seluruh anggota grup sekaligus.\n`;
+              } else if (localId === 4 || name.includes('Tampilkan') || name.includes('Semua')) {
+                responseText = `📜 *DAFTAR PERINTAH LENGKAP* 📜\n\n`;
+                responseText += `Halo ${mentionStr}, berikut ringkasan seluruh perintah bot:\n\n`;
+                responseText += `*Umum*: .menu, .infout, .registrasi, .panduan, .prodi, .syarat, .lpkbjj, .biaya, .tbo, .tuton, .sks, .nilai, .kalender, .salut, .kontak, .status\n\n`;
+                responseText += `*Game*: .fight, .ttt, .catur, .ping\n\n`;
+                responseText += `*Admin*: .addgroup, .delgroup, .kick, .add, .promote, .demote, .mute, .unmute, .warn, .tagall\n\n`;
+                responseText += `*Owner*: .backup, .restart, .addadmin, .deladmin, .block, .unblock\n\n`;
+                responseText += `💡 _Ketik perintah spesifik untuk informasi detail._`;
+              }
+
+              if (responseText) {
+                menu.votedUserJids.add(voterJid);
+                await client.sendMessage(menu.chatId, responseText, { mentions: [voterJid] });
+              }
+            }
+          }
+        } catch (err: any) {
+          logger.error(`Error checking menu poll votes: ${err.message}`);
+        }
+      }
+    }, 1500);
+
     // Load plugins when client is ready
     try {
       await pluginManager.loadPlugins(client);
@@ -374,83 +474,7 @@ export function initWhatsAppClient() {
     }
   });
 
-  // Event: Poll Vote Update (Interactive Menu selection)
-  client.on('vote_update', async (vote: any) => {
-    try {
-      if (!vote || !vote.parentMessage || !vote.parentMessage.fromMe) return;
-      if (!vote.selectedOptions || vote.selectedOptions.length === 0) return;
 
-      const body = vote.parentMessage.body || '';
-      if (!body.includes('PANDUAN INTERAKTIF MENU BOTWAUT')) return;
-
-      const voterJid = vote.voter;
-      const selected = vote.selectedOptions[0];
-      const localId = selected.localId;
-      const name = selected.name || '';
-
-      const chat = await vote.parentMessage.getChat();
-      const voterNum = voterJid.split('@')[0];
-      const mentionStr = `@${voterNum}`;
-
-      let responseText = '';
-
-      if (localId === 0 || name.includes('Info')) {
-        responseText = `🏢 *INFO AKADEMIK UT* 🏢\n\n`;
-        responseText += `Halo ${mentionStr}, berikut daftar perintah informasi akademik:\n\n`;
-        responseText += `- *.infout* : Pusat info umum UT Batam.\n`;
-        responseText += `- *.registrasi* : Panduan pendaftaran maba & registrasi mata kuliah.\n`;
-        responseText += `- *.panduan* : Peta jalan kuliah Semester 1 - 8.\n`;
-        responseText += `- *.prodi* : Daftar Program Studi S1/Diploma.\n`;
-        responseText += `- *.syarat* : Berkas persyaratan pendaftaran.\n`;
-        responseText += `- *.biaya* : Rincian SPP/uang kuliah (SIPAS vs Non-SIPAS).\n`;
-        responseText += `- *.kalender* : Kalender akademik & batas tanggal penting.\n`;
-        responseText += `- *.salut* : Daftar Sentra Layanan UT Riau.\n`;
-        responseText += `- *.kontak* : Hubungi Helpdesk UT Batam & Pusat.\n\n`;
-        responseText += `💡 _Ketik perintah di atas untuk info lebih lanjut._`;
-      } else if (localId === 1 || name.includes('Tuton')) {
-        responseText = `💻 *TUTON & SISTEM BELAJAR* 💻\n\n`;
-        responseText += `Halo ${mentionStr}, berikut rincian sistem pembelajaran UT:\n\n`;
-        responseText += `- *.tuton* : Kuliah online (E-Learning) & tugas wajib (Smt 3, 5, 7).\n`;
-        responseText += `- *.tuweb* : Kuliah tatap muka virtual via MS Teams.\n`;
-        responseText += `- *.tbo* : Panduan beli modul & baca Buku Materi Pokok online gratis.\n`;
-        responseText += `- *.lpkbjj* : Pelatihan kesiapan belajar mandiri mahasiswa baru.\n`;
-        responseText += `- *.sks* : Aturan pengambilan SKS & batas IP semester.\n`;
-        responseText += `- *.nilai* : Panduan cek nilai DNU/LKAM & bobot Tuton.\n`;
-      } else if (localId === 2 || name.includes('Game')) {
-        responseText = `🎮 *GAME ARENA & PvP RPG* 🎮\n\n`;
-        responseText += `Halo ${mentionStr}, berikut perintah game arena di bot:\n\n`;
-        responseText += `- *.fight <pemain1> <pemain2>* : Memulai pertarungan RPG PvP real-time.\n`;
-        responseText += `  _Contoh:_ \`.fight Andi Budi\`\n`;
-        responseText += `- *.fight leaderboard* : Papan peringkat juara pertarungan.\n`;
-        responseText += `- *.ttt* : Memulai game Tic Tac Toe interaktif.\n`;
-        responseText += `- *.catur* : Bermain catur kelompok atau lawan AI.\n`;
-        responseText += `- *.ping* : Cek kecepatan respon bot.\n`;
-      } else if (localId === 3 || name.includes('Admin') || name.includes('Moderator')) {
-        responseText = `🛡️ *ADMIN & MODERATOR GRUP* 🛡️\n\n`;
-        responseText += `Halo ${mentionStr}, berikut perintah khusus pengelola grup:\n\n`;
-        responseText += `- *.warn @user* : Memberikan peringatan ke member.\n`;
-        responseText += `- *.warnings @user* : Cek jumlah peringatan member.\n`;
-        responseText += `- *.kick @user* : Mengeluarkan member dari grup.\n`;
-        responseText += `- *.promote / .demote* : Mengatur jabatan admin grup.\n`;
-        responseText += `- *.mute / .unmute* : Membuka/menutup izin chat grup.\n`;
-        responseText += `- *.tagall* : Mentag seluruh anggota grup sekaligus.\n`;
-      } else if (localId === 4 || name.includes('Tampilkan') || name.includes('Semua')) {
-        responseText = `📜 *DAFTAR PERINTAH LENGKAP* 📜\n\n`;
-        responseText += `Halo ${mentionStr}, berikut ringkasan seluruh perintah bot:\n\n`;
-        responseText += `*Umum*: .menu, .infout, .registrasi, .panduan, .prodi, .syarat, .lpkbjj, .biaya, .tbo, .tuton, .sks, .nilai, .kalender, .salut, .kontak, .status\n\n`;
-        responseText += `*Game*: .fight, .ttt, .catur, .ping\n\n`;
-        responseText += `*Admin*: .addgroup, .delgroup, .kick, .add, .promote, .demote, .mute, .unmute, .warn, .tagall\n\n`;
-        responseText += `*Owner*: .backup, .restart, .addadmin, .deladmin, .block, .unblock\n\n`;
-        responseText += `💡 _Ketik perintah spesifik untuk informasi detail._`;
-      }
-
-      if (responseText) {
-        await chat.sendMessage(responseText, { mentions: [voterJid] });
-      }
-    } catch (err: any) {
-      logger.error(`Error in vote_update menu handler: ${err.message}`);
-    }
-  });
 
   // Event: Error
   client.on('error', (err: any) => {

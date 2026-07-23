@@ -1,5 +1,6 @@
 import { Command } from './index.js';
 import pkg from 'whatsapp-web.js';
+import { registerActivePollMenu } from '../utils/pollStore.js';
 
 const { Poll } = pkg;
 
@@ -20,7 +21,10 @@ export const menuCommand: Command = {
       ]
     );
 
-    await chat.sendMessage(poll);
+    const sentMsg = await chat.sendMessage(poll);
+    if (sentMsg && sentMsg.id && sentMsg.id._serialized) {
+      registerActivePollMenu(sentMsg.id._serialized, chat.id._serialized);
+    }
   }
 };
 
