@@ -235,6 +235,10 @@ export function initWhatsAppClient() {
             }
           } catch (_) {}
 
+          // Clean the message ID to ensure it matches the clean format without participant JID for fromMe messages
+          const parts = menu.messageId.split('_');
+          const cleanMessageId = parts.slice(0, 3).join('_');
+
           // Directly query poll votes from Puppeteer browser database to avoid MsgKey serialization bugs in library
           const votes = await client.pupPage.evaluate(async (serializedId: string) => {
             try {
@@ -260,7 +264,7 @@ export function initWhatsAppClient() {
                 error: err.message || err.toString()
               };
             }
-          }, menu.messageId);
+          }, cleanMessageId);
 
           if (votes && !votes.success) {
             logger.error(`[PollMenuCheck] Browser evaluation error for poll ${menu.messageId}: ${votes.error}`);
@@ -268,74 +272,127 @@ export function initWhatsAppClient() {
           }
 
           const voteList = votes?.votes || [];
-          if (voteList.length > 0) {
-            logger.info(`[PollMenuCheck] Poll ${menu.messageId} has ${voteList.length} votes.`);
-          }
           if (voteList.length === 0) continue;
 
           for (const vote of voteList) {
             const voterJid = vote.voter;
-            if (!voterJid || menu.votedUserJids.has(voterJid)) continue;
+            if (!voterJid) continue;
+
+            // Requirement: Only the user who requested the menu poll is allowed to trigger the response
+            const voterNum = voterJid.split('@')[0];
+            const requesterNum = menu.userId.split('@')[0];
+            if (voterJid !== menu.userId && voterNum !== requesterNum) continue;
 
             if (vote.selectedOptionLocalIds && vote.selectedOptionLocalIds.length > 0) {
               const localId = vote.selectedOptionLocalIds[0];
-              const voterNum = voterJid.split('@')[0];
               const mentionStr = `@${voterNum}`;
               let responseText = '';
+              let menuName = '';
 
               if (localId === 0) {
-                responseText = `🏢 *INFO AKADEMIK UT* 🏢\n\n`;
-                responseText += `Halo ${mentionStr}, berikut daftar perintah informasi akademik:\n\n`;
-                responseText += `- *.infout* : Pusat info umum UT Batam.\n`;
-                responseText += `- *.registrasi* : Panduan pendaftaran maba & registrasi mata kuliah.\n`;
-                responseText += `- *.panduan* : Peta jalan kuliah Semester 1 - 8.\n`;
-                responseText += `- *.prodi* : Daftar Program Studi S1/Diploma.\n`;
-                responseText += `- *.syarat* : Berkas persyaratan pendaftaran.\n`;
-                responseText += `- *.biaya* : Rincian SPP/uang kuliah (SIPAS vs Non-SIPAS).\n`;
-                responseText += `- *.kalender* : Kalender akademik & batas tanggal penting.\n`;
-                responseText += `- *.salut* : Daftar Sentra Layanan UT Riau.\n`;
-                responseText += `- *.kontak* : Hubungi Helpdesk UT Batam & Pusat.\n\n`;
-                responseText += `💡 _Ketik perintah di atas untuk info lebih lanjut._`;
+                menuName = 'Info Akademik UT';
+                responseText = `🏢 *INFO AKADEMIK UT*\n`;
+                responseText += `┌─〔 INFO AKADEMIK UT 〕\n`;
+                responseText += `│ • *.infout* : Info akademik umum\n`;
+                responseText += `│ • *.registrasi* : Registrasi mata kuliah\n`;
+                responseText += `│ • *.panduan* : Peta jalan smt 1-8\n`;
+                responseText += `│ • *.prodi* : Daftar program studi\n`;
+                responseText += `│ • *.syarat* : Persyaratan berkas\n`;
+                responseText += `│ • *.biaya* : Rincian SPP uang kuliah\n`;
+                responseText += `│ • *.kalender* : Kalender akademik & batas tanggal\n`;
+                responseText += `│ • *.salut* : Sentra Layanan UT Riau\n`;
+                responseText += `│ • *.kontak* : Kontak resmi UT\n`;
+                responseText += `└──────────────`;
               } else if (localId === 1) {
-                responseText = `💻 *TUTON & SISTEM BELAJAR* 💻\n\n`;
-                responseText += `Halo ${mentionStr}, berikut rincian sistem pembelajaran UT:\n\n`;
-                responseText += `- *.tuton* : Kuliah online (E-Learning) & tugas wajib (Smt 3, 5, 7).\n`;
-                responseText += `- *.tuweb* : Kuliah tatap muka virtual via MS Teams.\n`;
-                responseText += `- *.tbo* : Panduan beli modul & baca Buku Materi Pokok online gratis.\n`;
-                responseText += `- *.lpkbjj* : Pelatihan kesiapan belajar mandiri mahasiswa baru.\n`;
-                responseText += `- *.sks* : Aturan pengambilan SKS & batas IP semester.\n`;
-                responseText += `- *.nilai* : Panduan cek nilai DNU/LKAM & bobot Tuton.\n`;
+                menuName = 'Tuton & Sistem Belajar';
+                responseText = `💻 *TUTON & BELAJAR*\n`;
+                responseText += `┌─〔 TUTON & BELAJAR 〕\n`;
+                responseText += `│ • *.tuton* : Panduan Tuton & Tuweb\n`;
+                responseText += `│ • *.tbo* : Pembelian modul & Ruang Baca\n`;
+                responseText += `│ • *.lpkbjj* : Kegiatan orientasi wajib LPKBJJ\n`;
+                responseText += `│ • *.sks* : Aturan beban SKS\n`;
+                responseText += `│ • *.nilai* : Cek nilai DNU/LKAM\n`;
+                responseText += `│ • *.karil* : Karya Ilmiah wajib\n`;
+                responseText += `│ • *.pustaka* : Perpus digital & alur yudisium\n`;
+                responseText += `└──────────────`;
               } else if (localId === 2) {
-                responseText = `🎮 *GAME ARENA & PvP RPG* 🎮\n\n`;
-                responseText += `Halo ${mentionStr}, berikut perintah game arena di bot:\n\n`;
-                responseText += `- *.fight <pemain1> <pemain2>* : Memulai pertarungan RPG PvP real-time.\n`;
-                responseText += `  _Contoh:_ \`.fight Andi Budi\`\n`;
-                responseText += `- *.fight leaderboard* : Papan peringkat juara pertarungan.\n`;
-                responseText += `- *.ttt* : Memulai game Tic Tac Toe interaktif.\n`;
-                responseText += `- *.catur* : Bermain catur kelompok atau lawan AI.\n`;
-                responseText += `- *.ping* : Cek kecepatan respon bot.\n`;
+                menuName = 'Game Arena & PvP RPG';
+                responseText = `🎮 *GAME ARENA*\n`;
+                responseText += `┌─〔 GAME ARENA 〕\n`;
+                responseText += `│ • *.fight <pemain1> <pemain2>*\n`;
+                responseText += `│ • *.fight leaderboard*\n`;
+                responseText += `│ • *.ttt* : Game Tic Tac Toe\n`;
+                responseText += `│ • *.catur* : Game Catur AI\n`;
+                responseText += `│ • *.ping* : Cek kecepatan bot\n`;
+                responseText += `└──────────────`;
               } else if (localId === 3) {
-                responseText = `🛡️ *ADMIN & MODERATOR GRUP* 🛡️\n\n`;
-                responseText += `Halo ${mentionStr}, berikut perintah khusus pengelola grup:\n\n`;
-                responseText += `- *.warn @user* : Memberikan peringatan ke member.\n`;
-                responseText += `- *.warnings @user* : Cek jumlah peringatan member.\n`;
-                responseText += `- *.kick @user* : Mengeluarkan member dari grup.\n`;
-                responseText += `- *.promote / .demote* : Mengatur jabatan admin grup.\n`;
-                responseText += `- *.mute / .unmute* : Membuka/menutup izin chat grup.\n`;
-                responseText += `- *.tagall* : Mentag seluruh anggota grup sekaligus.\n`;
+                menuName = 'Admin & Moderator Grup';
+                responseText = `🛡️ *MENU ADMIN*\n`;
+                responseText += `┌─〔 MENU ADMIN 〕\n`;
+                responseText += `│ • *.warn* : Peringatkan member\n`;
+                responseText += `│ • *.kick* : Keluarkan anggota\n`;
+                responseText += `│ • *.promote* / *.demote*\n`;
+                responseText += `│ • *.mute* / *.unmute*\n`;
+                responseText += `│ • *.tagall* : Tag semua anggota\n`;
+                responseText += `│ • *.hidetag* : Tag tersembunyi\n`;
+                responseText += `└──────────────`;
               } else if (localId === 4) {
+                menuName = 'Tampilkan Semua Menu (Teks)';
                 responseText = `📜 *DAFTAR PERINTAH LENGKAP* 📜\n\n`;
-                responseText += `Halo ${mentionStr}, berikut ringkasan seluruh perintah bot:\n\n`;
-                responseText += `*Umum*: .menu, .infout, .registrasi, .panduan, .prodi, .syarat, .lpkbjj, .biaya, .tbo, .tuton, .sks, .nilai, .kalender, .salut, .kontak, .status\n\n`;
-                responseText += `*Game*: .fight, .ttt, .catur, .ping\n\n`;
-                responseText += `*Admin*: .addgroup, .delgroup, .kick, .add, .promote, .demote, .mute, .unmute, .warn, .tagall\n\n`;
-                responseText += `*Owner*: .backup, .restart, .addadmin, .deladmin, .block, .unblock\n\n`;
-                responseText += `💡 _Ketik perintah spesifik untuk informasi detail._`;
+                responseText += `*Umum (Member)*:\n`;
+                responseText += `- .menu : Bantuan interaktif\n`;
+                responseText += `- .infout : Informasi akademik UT\n`;
+                responseText += `- .registrasi : Panduan registrasi\n`;
+                responseText += `- .panduan : Peta jalan akademik\n`;
+                responseText += `- .prodi : Daftar program studi\n`;
+                responseText += `- .syarat : Berkas pendaftaran\n`;
+                responseText += `- .lpkbjj : Orientasi wajib maba\n`;
+                responseText += `- .biaya : Rincian SPP uang kuliah\n`;
+                responseText += `- .tbo : Pembelian buku modul\n`;
+                responseText += `- .tuton : Panduan Tutorial Online\n`;
+                responseText += `- .sks : Aturan beban SKS\n`;
+                responseText += `- .nilai : Cek nilai DNU\n`;
+                responseText += `- .kalender : Batas tanggal penting\n`;
+                responseText += `- .salut : Sentra Layanan UT\n`;
+                responseText += `- .kontak : Helpdesk UT Batam\n`;
+                responseText += `- .owner : Info pembuat bot\n`;
+                responseText += `- .saran : Kirim masukan\n`;
+                responseText += `- .rules : Tata tertib grup\n`;
+                responseText += `- .status : Periksa server\n\n`;
+                responseText += `*Game Arena*:\n`;
+                responseText += `- .fight : PvP RPG 1v1\n`;
+                responseText += `- .fight leaderboard : Peringkat PvP\n`;
+                responseText += `- .ttt : Game Tic Tac Toe\n`;
+                responseText += `- .catur : Game Catur AI\n`;
+                responseText += `- .ping : Latensi bot\n\n`;
+                responseText += `*Moderator & Admin*:\n`;
+                responseText += `- .warn / .warnings\n`;
+                responseText += `- .kick : Keluarkan anggota\n`;
+                responseText += `- .promote / .demote\n`;
+                responseText += `- .mute / .unmute\n`;
+                responseText += `- .tagall / .hidetag`;
               }
 
               if (responseText) {
-                menu.votedUserJids.add(voterJid);
+                // Requirement: Log to console [NAMA_USER] memilih: [NAMA_MENU]
+                let contactName = voterNum;
+                try {
+                  const contact = await client.getContactById(voterJid);
+                  if (contact && contact.pushname) {
+                    contactName = contact.pushname;
+                  }
+                } catch (_) {}
+                logger.info(`[${contactName}] memilih: ${menuName}`);
+
+                // Send the response message
                 await client.sendMessage(menu.chatId, responseText, { mentions: [voterJid] });
+
+                // Requirement: After response is sent, remove the user's poll session (ensure single vote response)
+                const idx = activePollMenus.indexOf(menu);
+                if (idx !== -1) {
+                  activePollMenus.splice(idx, 1);
+                }
+                break; // Break the votes loop since the menu session is now closed
               }
             }
           }

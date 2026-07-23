@@ -65,7 +65,7 @@ export const menuCommand: Command = {
     }
 
     if (messageId) {
-      registerActivePollMenu(messageId, chat.id._serialized);
+      registerActivePollMenu(messageId, chat.id._serialized, msg.author || msg.from);
     } else {
       logger.error(`[MenuCommand] Failed to retrieve sent message ID for menu poll.`);
     }
