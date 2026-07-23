@@ -239,6 +239,30 @@ export function initWhatsAppClient() {
           const parts = menu.messageId.split('_');
           const cleanMessageId = parts.slice(0, 3).join('_');
 
+          // Debug: print current keys in WAWebPollsVotesSchema to confirm key matching format
+          try {
+            const tableKeys = await client.pupPage.evaluate(async () => {
+              try {
+                const table = window.require('WAWebPollsVotesSchema').getTable();
+                const all = await table.toArray();
+                return all.map((item: any) => {
+                  const rawSender = item.sender || item.author;
+                  const voterJid = typeof rawSender === 'object' && rawSender ? (rawSender._serialized || rawSender.toString()) : rawSender;
+                  return {
+                    id: item.id,
+                    parentMsgKey: item.parentMsgKey,
+                    voter: voterJid
+                  };
+                });
+              } catch (err: any) {
+                return { error: err.message || err.toString() };
+              }
+            });
+            logger.info(`[PollMenuCheck] Debug DB table keys: ${JSON.stringify(tableKeys)}`);
+          } catch (err: any) {
+            logger.error(`[PollMenuCheck] Debug DB table error: ${err.message}`);
+          }
+
           // Directly query poll votes from Puppeteer browser database to avoid MsgKey serialization bugs in library
           const votes = await client.pupPage.evaluate(async (serializedId: string) => {
             try {
