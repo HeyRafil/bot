@@ -241,27 +241,57 @@ export function initWhatsAppClient() {
 
           // Debug: print current keys in WAWebPollsVotesSchema to confirm key matching format
           try {
-            const tableKeys = await client.pupPage.evaluate(async () => {
+            const msgProps = await client.pupPage.evaluate(async (serializedId: string, cleanId: string) => {
               try {
-                const table = window.require('WAWebPollsVotesSchema').getTable();
-                const all = await table.all();
-                return all.map((item: any) => {
-                  const rawSender = item.sender || item.author;
-                  const voterJid = typeof rawSender === 'object' && rawSender ? (rawSender._serialized || rawSender.toString()) : rawSender;
-                  return {
-                    id: item.id,
-                    parentMsgKey: item.parentMsgKey,
-                    voter: voterJid,
-                    selectedOptionLocalIds: item.selectedOptionLocalIds ? Array.from(new Uint8Array(item.selectedOptionLocalIds)) : []
-                  };
-                });
+                const collections = (window as any).require('WAWebCollections');
+                if (!collections || !collections.Msg) return { error: "No Msg collection found" };
+                
+                // Try to find the message by either serializedId or cleanId
+                let msg = collections.Msg.get(serializedId);
+                let foundId = serializedId;
+                if (!msg) {
+                  msg = collections.Msg.get(cleanId);
+                  foundId = cleanId;
+                }
+                if (!msg) return { error: `Message not found in collections.Msg using either ${serializedId} or ${cleanId}` };
+                
+                // Extract poll-related properties
+                const pollProps: any = {
+                  foundId,
+                  type: msg.type,
+                  pollName: msg.pollName,
+                  pollOptions: msg.pollOptions,
+                  rawKeys: Object.keys(msg).filter(k => k.toLowerCase().includes('poll') || k.toLowerCase().includes('vote'))
+                };
+
+                // Check for vote properties
+                if (msg.pollVotes) {
+                  pollProps.pollVotesType = typeof msg.pollVotes;
+                  pollProps.pollVotesKeys = Object.keys(msg.pollVotes);
+                  if (typeof msg.pollVotes.toArray === 'function') {
+                    const votesArr = msg.pollVotes.toArray();
+                    pollProps.pollVotesLength = votesArr.length;
+                    pollProps.pollVotesData = votesArr.map((v: any) => ({
+                      sender: v.sender || v.author || v.voter || (v.id && v.id.participant) || (v.id && v.id.user),
+                      selectedOptions: v.selectedOptions || v.selectedOptionLocalIds
+                    }));
+                  } else if (Array.isArray(msg.pollVotes)) {
+                    pollProps.pollVotesLength = msg.pollVotes.length;
+                    pollProps.pollVotesData = msg.pollVotes.map((v: any) => ({
+                      sender: v.sender || v.author || v.voter,
+                      selectedOptions: v.selectedOptions || v.selectedOptionLocalIds
+                    }));
+                  }
+                }
+
+                return pollProps;
               } catch (err: any) {
                 return { error: err.message || err.toString() };
               }
-            });
-            logger.info(`[PollMenuCheck] Debug DB table contents: ${JSON.stringify(tableKeys)}`);
+            }, menu.messageId, cleanMessageId);
+            logger.info(`[PollMenuCheck] Debug Msg properties: ${JSON.stringify(msgProps)}`);
           } catch (err: any) {
-            logger.error(`[PollMenuCheck] Debug DB table error: ${err.message}`);
+            logger.error(`[PollMenuCheck] Debug Msg error: ${err.message}`);
           }
 
           // Directly query poll votes from Puppeteer browser database to avoid MsgKey serialization bugs in library
