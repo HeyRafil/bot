@@ -1,0 +1,86 @@
+[
+  {
+    "question": "Apa itu UOBM (Ujian Online Berbasis Mata Kuliah)?",
+    "answer": "UOBM adalah layanan ujian online yang diselenggarakan secara tatap muka di lokasi yang ditentukan UT (seperti UPBJJ atau kantor mitra). Mahasiswa mengerjakan soal ujian secara online menggunakan perangkat PC/laptop yang disediakan di lokasi ujian. Soal bertipe objektif (pilihan ganda) atau esai.",
+    "source": "https://www.ut.ac.id",
+    "category": "ujian"
+  },
+  {
+    "question": "Apa itu UOLP (Ujian Online Luar Negeri/Lainnya)?",
+    "answer": "UOLP adalah ujian online yang dikhususkan bagi mahasiswa UT yang berada di luar negeri atau dengan kondisi tertentu. Pelaksanaan ujian diawasi secara online melalui kamera/Zoom.",
+    "source": "https://www.ut.ac.id",
+    "category": "ujian"
+  },
+  {
+    "question": "Apa itu THE (Take Home Exam)?",
+    "answer": "Take Home Exam (THE) adalah modus ujian UT di mana mahasiswa mengunduh naskah soal dari laman THE (the.ut.ac.id), mengerjakannya di rumah secara open book, dan mengunggah Buku Jawaban Ujian (BJU) dalam batas waktu yang ditentukan (biasanya 12 jam sejak naskah diunduh pada hari ujian yang terjadwal).",
+    "source": "https://www.ut.ac.id",
+    "category": "ujian"
+  },
+  {
+    "question": "Bagaimana cara registrasi mata kuliah di MyUT?",
+    "answer": "Registrasi mata kuliah dilakukan melalui portal MyUT (myut.ut.ac.id). Login menggunakan akun mahasiswa (NIM & Password), masuk ke menu Registrasi Mata Kuliah, pilih mata kuliah sesuai kurikulum/paket, klik simpan, lalu unduh LIP (Lembar Informasi Pembayaran) untuk melakukan pembayaran di Bank (BRI, Mandiri, BTN, BNI) atau Alfamart/Indomaret.",
+    "source": "https://myut.ut.ac.id",
+    "category": "registrasi"
+  },
+  {
+    "question": "Bagaimana cara reset password MyUT?",
+    "answer": "Jika lupa password MyUT, buka myut.ut.ac.id, klik tombol 'Lupa Password' di bawah form login. Masukkan NIM, tanggal lahir, dan email terdaftar. Sistem akan mengirimkan link reset password ke email Anda. Jika email tidak aktif, hubungi Hallo UT di 1500024 atau UPBJJ terdekat untuk pembaruan data email.",
+    "source": "https://myut.ut.ac.id",
+    "category": "myut"
+  },
+  {
+    "question": "Kapan Tutorial Online (Tuton) dimulai?",
+    "answer": "Jadwal Tutorial Online (Tuton) biasanya dimulai sekitar 1-2 bulan setelah registrasi ditutup. Tanggal pasti dapat dilihat pada Kalender Akademik UT di website resmi. Mahasiswa wajib melakukan aktivasi akun Tuton terlebih dahulu di elearning.ut.ac.id dan melakukan pengisian form Kesediaan Mengikuti Tuton.",
+    "source": "https://elearning.ut.ac.id",
+    "category": "tuton"
+  },
+  {
+    "question": "Apa perbedaan Tuton dan Tuweb?",
+    "answer": "Tuton (Tutorial Online) dilakukan secara asinkronus melalui elearning.ut.ac.id di mana mahasiswa berdiskusi dan mengerjakan tugas secara mandiri selama 8 sesi. Tuweb (Tutorial Web) dilakukan secara sinkronus melalui aplikasi video conference (seperti Microsoft Teams atau Zoom) yang dipandu oleh tutor pada jadwal tertentu (biasanya hari Sabtu/Minggu).",
+    "source": "https://www.ut.ac.id",
+    "category": "tutorial"
+  },
+  {
+    "question": "Biaya Layanan Akademik Lainnya Program Diploma",
+    "answer": "*) Biaya registrasi pertama mata kuliah Karya Ilmiah di luar Uang Kuliah akan diberlakukan mulai semester 2023/2024 Genap (2024.1).Biaya Uang Kuliah dan Layanan Akademik Lainnya per Semester Program Diploma dan Sarjana Non Sistem Paket Semester, serta informasi selengkapnya terdapat pada Katalog Sistem Penyelenggaraan.",
+    "source": "https://manado.ut.ac.id/biaya-pendidikan",
+    "category": "manado"
+  },
+  {
+    "question": "Tarif Biaya Pendidikan Sekolah Pascasarjana Universitas Terbuka Dengan Registrasi Pertama Tahun Akademik 2022/23.2 (2023.1) dan 2023/24.1 (2023.2)",
+    "answer": "*) Publikasi hanya di jurnal Universitas Terbuka, biaya produksi di luar jurnal Universitas Terbuka ditangggung oleh mahasiswa",
+    "source": "https://manado.ut.ac.id/biaya-pendidikan",
+    "category": "manado"
+  },
+  {
+    "question": "Tarif Biaya Pendidikan Sekolah Pascasarjana Universitas Terbuka Dengan Registrasi Pertama Sebelum Masa 2022/23.2 (2023.1)",
+    "answer": "*) Publikasi hanya di jurnal Universitas Terbuka, biaya produksi di luar jurnal Universitas Terbuka ditangggung oleh mahasiswa",
+    "source": "https://manado.ut.ac.id/biaya-pendidikan",
+    "category": "manado"
+  },
+  {
+    "question": "Tarif Biaya Pendidikan Doktor Universitas Terbuka",
+    "answer": "*) Tarif dapat berubah sesuai dengan peraturan yang berlaku **) Untuk Program Doktor Semester I-VIII",
+    "source": "https://manado.ut.ac.id/biaya-pendidikan",
+    "category": "manado"
+  },
+  {
+    "question": "Persyaratan Pendaftaran & Seleksi Magister Universitas Terbuka",
+    "answer": "PERSYARATAN BERKASSELEKSI Kegiatan seleksi terdiri atas tiga tahap berikut.",
+    "source": "https://manado.ut.ac.id/persyaratan-berkas",
+    "category": "manado"
+  },
+  {
+    "question": "Persyaratan Mengikuti Program Magister Universitas Terbuka",
+    "answer": "Calon mahasiswa yang dapat mengikuti pendidikan di Program Pascasarjana Universitas Terbuka harus memiliki latar belakang pendidikan sesuai dengan ketentuan dan telah dinyatakan lulus tes masuk. Hal-hal yang terkait dengan persyaratan ijazah dan tes masuk sebagai berikut.Catatan:",
+    "source": "https://manado.ut.ac.id/persyaratan-berkas",
+    "category": "manado"
+  },
+  {
+    "question": "Persyaratan Pendaftaran & Seleksi Dokter Universitas Terbuka",
+    "answer": "PERSYARATAN PENDAFTARANSELEKSI Kegiatan seleksi terdiri atas tiga tahap berikut.",
+    "source": "https://manado.ut.ac.id/persyaratan-berkas",
+    "category": "manado"
+  }
+]

@@ -1,0 +1,1113 @@
+[
+  {
+    "code": "MKWN4101",
+    "name": "Pendidikan Agama Islam",
+    "semester": 1,
+    "description": "Mempelajari landasan keimanan, kemanusiaan, etika sosial, serta toleransi antar umat beragama dalam perspektif Islam.",
+    "topics": [
+      "Tuhan Yang Maha Esa dan Ketuhanan",
+      "Hakikat Manusia",
+      "Hukum, Hak Asasi Manusia, dan Demokrasi",
+      "Etika, Moral, dan Akhlak",
+      "Iptek dan Seni dalam Islam",
+      "Masyarakat Madani & Kerukunan Beragama"
+    ],
+    "study_tips": "Pahami konsep moralitas sosial dan etika beragama. Banyak membaca modul BMP resmi UT.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/mkwn4101-pendidikan-agama-islam/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/MKWN4101.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/mkwn4101"
+  },
+  {
+    "code": "MKWN4109",
+    "name": "Pendidikan Kewarganegaraan",
+    "semester": 1,
+    "description": "Mempelajari konsep hak dan kewajiban warga negara, wawasan nusantara, ketahanan nasional, politik, dan strategi nasional.",
+    "topics": [
+      "Wawasan Nusantara",
+      "Ketahanan Nasional",
+      "Hak & Kewajiban Warga Negara",
+      "Demokrasi Indonesia",
+      "Hak Asasi Manusia",
+      "Geopolitik & Geostrategi Indonesia"
+    ],
+    "study_tips": "Fokus pada sejarah perumusan dasar negara dan konstitusi UUD 1945.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/mkwn4109-pendidikan-kewarganegaraan/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/MKWN4109.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/mkwn4109"
+  },
+  {
+    "code": "STMA4112",
+    "name": "Matematika Dasar",
+    "semester": 1,
+    "description": "Mempelajari logika matematika, himpunan, sistem bilangan real, fungsi, limit, turunan, dan integral dasar.",
+    "topics": [
+      "Logika & Himpunan",
+      "Sistem Bilangan Real",
+      "Fungsi & Grafik",
+      "Limit Fungsi",
+      "Turunan (Derivatif)",
+      "Integral Dasar & Penerapannya"
+    ],
+    "study_tips": "Seringlah berlatih mengerjakan soal-soal latihan kalkulus dasar dan pembuktian logika himpunan.",
+    "external_resources": [
+      {
+        "source": "Khan Academy",
+        "name": "Calculus & Algebra Foundations",
+        "url": "https://www.khanacademy.org/math"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stma4112-matematika-dasar/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STMA4112.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stma4112"
+  },
+  {
+    "code": "STSI4101",
+    "name": "Pengantar Sistem Informasi",
+    "semester": 1,
+    "description": "Mempelajari konsep dasar teknologi informasi, komponen sistem informasi (hardware, software, database, jaringan), peranan SI dalam bisnis dan keunggulan kompetitif, serta etika dan tren masa depan SI.",
+    "topics": [
+      "Konsep Dasar Sistem & Informasi",
+      "Komponen Teknologi Informasi (Hardware & Software)",
+      "Database & Management Information Systems",
+      "Telekomunikasi, Internet, & Jaringan Nirkabel",
+      "E-Commerce & Sistem Kolaborasi Bisnis",
+      "Keamanan Sistem Informasi & Etika Teknologi",
+      "Artificial Intelligence & Masa Depan Sistem Informasi"
+    ],
+    "study_tips": "Fokus pada pemahaman istilah/terminologi teknologi informasi. Baca ringkasan Modul 1-9 di RBV dan hubungkan konsep teori dengan contoh aplikasi bisnis.",
+    "external_resources": [
+      {
+        "source": "Coursera (Minnesota Univ)",
+        "name": "Introduction to Information Systems",
+        "url": "https://www.coursera.org/learn/information-systems"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4101-pengantar-sistem-informasi/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4101.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4101"
+  },
+  {
+    "code": "STSI4102",
+    "name": "Algoritma dan Pemrograman",
+    "semester": 1,
+    "description": "Mempelajari logika penyelesaian masalah menggunakan algoritma, pseudocode, flowchart, serta dasarnya pemrograman menggunakan bahasa terstruktur (seperti Python atau C++).",
+    "topics": [
+      "Logika Algoritma & Flowchart",
+      "Tipe Data, Variabel, & Operator",
+      "Struktur Kendali Percabangan (If-Else)",
+      "Struktur Kendali Perulangan (For, While)",
+      "Fungsi & Prosedur",
+      "Array / Larik & Manipulasinya"
+    ],
+    "study_tips": "Tulis ulang kode dan jalankan di compiler. Pahami cara kerja perulangan bersarang (nested loops) dan pemecahan masalah dengan fungsi.",
+    "external_resources": [
+      {
+        "source": "W3Schools",
+        "name": "Python Programming Tutorial",
+        "url": "https://www.w3schools.com/python/"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4102-algoritma-dan-pemrograman/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4102.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4102"
+  },
+  {
+    "code": "STSI4103",
+    "name": "Sistem Operasi",
+    "semester": 1,
+    "description": "Mempelajari struktur dan prinsip kerja sistem operasi modern, mencakup manajemen proses, memori, penyimpanan, dan sistem file.",
+    "topics": [
+      "Pengenalan & Struktur Sistem Operasi",
+      "Manajemen Proses & Penjadwalan CPU",
+      "Sinkronisasi & Deadlock",
+      "Manajemen Memori (Virtual Memory)",
+      "Manajemen Penyimpanan & I/O",
+      "Sistem Berkas & Keamanan OS"
+    ],
+    "study_tips": "Kuasai diagram transisi proses CPU dan algoritma penjadwalan seperti Round Robin / FIFO.",
+    "external_resources": [
+      {
+        "source": "GeeksforGeeks",
+        "name": "Operating Systems Tutorials",
+        "url": "https://www.geeksforgeeks.org/operating-systems/"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4103-sistem-operasi/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4103.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4103"
+  },
+  {
+    "code": "MKDI4201",
+    "name": "Bahasa Inggris",
+    "semester": 2,
+    "description": "Mempelajari tata bahasa, membaca pemahaman teks akademis, serta menulis esai formal dalam bahasa Inggris.",
+    "topics": [
+      "Basic Grammar & Tenses",
+      "Reading Comprehension of IT texts",
+      "Vocabulary Building",
+      "Writing Academic Essays",
+      "Speaking & Listening Skills"
+    ],
+    "study_tips": "Biasakan membaca artikel teknologi berbahasa Inggris untuk menambah kosakata kosakata IT.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/mkdi4201-bahasa-inggris/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/MKDI4201.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/mkdi4201"
+  },
+  {
+    "code": "MKKI4201",
+    "name": "Pengantar Statistika",
+    "semester": 2,
+    "description": "Mempelajari pengumpulan data, statistika deskriptif, probabilitas, distribusi sampling, estimasi parameter, dan pengujian hipotesis.",
+    "topics": [
+      "Statistika Deskriptif & Penyajian Data",
+      "Ukuran Pemusatan & Penyebaran",
+      "Teori Probabilitas",
+      "Distribusi Probabilitas (Normal, Binomial)",
+      "Pengujian Hipotesis & Regresi Linear"
+    ],
+    "study_tips": "Kuasai cara membaca tabel distribusi Z dan T. Latih perhitungan deviasi standar.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/mkki4201-pengantar-statistika/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/MKKI4201.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/mkki4201"
+  },
+  {
+    "code": "MKWN4108",
+    "name": "Bahasa Indonesia",
+    "semester": 2,
+    "description": "Mempelajari tata bahasa baku, penulisan karya ilmiah sesuai PUEBI, teknik presentasi, serta membaca kritis.",
+    "topics": [
+      "Sejarah & Kedudukan Bahasa Indonesia",
+      "Membaca Kritis & Menyimak",
+      "PUEBI & Tata Istilah Baku",
+      "Penulisan Karya Ilmiah",
+      "Presentasi Ilmiah"
+    ],
+    "study_tips": "Sangat berguna untuk persiapan penulisan Karya Ilmiah (Karil) nantinya.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/mkwn4108-bahasa-indonesia/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/MKWN4108.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/mkwn4108"
+  },
+  {
+    "code": "MKWN4110",
+    "name": "Pancasila",
+    "semester": 2,
+    "description": "Mempelajari nilai-nilai Pancasila sebagai ideologi negara, dasar filsafat, dan etika kehidupan berbangsa.",
+    "topics": [
+      "Sejarah Perumusan Pancasila",
+      "Pancasila sebagai Sistem Filsafat",
+      "Pancasila sebagai Etika Politik",
+      "Implementasi Pancasila di Era Modern"
+    ],
+    "study_tips": "Pelajari butir-butir Pancasila dan penerapannya dalam kehidupan sosial masyarakat.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/mkwn4110-pancasila/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/MKWN4110.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/mkwn4110"
+  },
+  {
+    "code": "STMA4113",
+    "name": "Aljabar Linear Elementer",
+    "semester": 2,
+    "description": "Mempelajari matriks dan operasinya, sistem persamaan linear (SPL), determinan, vektor, ruang vektor, dan transformasi linear.",
+    "topics": [
+      "Matriks & Operasi Matriks",
+      "Eliminasi Gauss & Gauss-Jordan",
+      "Determinan & Invers Matriks",
+      "Vektor di R2 & R3",
+      "Ruang Vektor & Transformasi Linear"
+    ],
+    "study_tips": "Latih perhitungan invers matriks menggunakan metode kofaktor atau OBE (Operasi Baris Elementer).",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stma4113-aljabar-linear-elementer/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STMA4113.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stma4113"
+  },
+  {
+    "code": "STSI4104",
+    "name": "Struktur Data",
+    "semester": 2,
+    "description": "Mempelajari cara penyimpanan dan pengorganisasian data di memori komputer, mencakup stack, queue, linked list, tree, dan graph.",
+    "topics": [
+      "Array & Pointer",
+      "Linked List (Single & Double)",
+      "Stack (Tumpukan) & Queue (Antrian)",
+      "Binary Tree & Binary Search Tree (BST)",
+      "Graph & Algoritma Traversal (BFS & DFS)",
+      "Algoritma Pencarian & Pengurutan (Sorting)"
+    ],
+    "study_tips": "Kuasai visualisasi operasi push/pop pada stack serta enqueue/dequeue pada queue. Sering muncul di soal ujian.",
+    "external_resources": [
+      {
+        "source": "Visualgo",
+        "name": "Visualisasi Animasi Struktur Data",
+        "url": "https://visualgo.net/id"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4104-struktur-data/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4104.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4104"
+  },
+  {
+    "code": "STSI4105",
+    "name": "Basis Data",
+    "semester": 2,
+    "description": "Mempelajari perancangan basis data relasional, pemodelan data menggunakan ERD (Entity Relationship Diagram), normalisasi tabel untuk menghindari redudansi, serta manipulasi data menggunakan SQL.",
+    "topics": [
+      "Konsep Dasar & Arsitektur Basis Data",
+      "Model Data & Perancangan ERD (Entity Relationship Diagram)",
+      "Model Relasional & Relational Algebra",
+      "Normalisasi Data (1NF, 2NF, 3NF, BCNF) untuk Mengurangi Anomali",
+      "SQL Dasar & Lanjut (DDL: CREATE/ALTER, DML: SELECT/INSERT/UPDATE/DELETE)",
+      "Teknik Join Tabel (Inner, Left, Right, Full Outer Join)",
+      "Keamanan Data & Manajemen Transaksi"
+    ],
+    "study_tips": "UAS mata kuliah ini seringkali memuat soal perancangan ERD dan Normalisasi. Latihlah cara membuat tabel dari 1NF hingga 3NF secara manual. Gunakan W3Schools SQL Editor untuk mempraktikkan query SELECT & JOIN secara langsung agar terbiasa.",
+    "external_resources": [
+      {
+        "source": "W3Schools",
+        "name": "SQL & Database Basics Tutorial (Sangat direkomendasikan untuk latihan)",
+        "url": "https://www.w3schools.com/sql/"
+      },
+      {
+        "source": "freeCodeCamp",
+        "name": "Full Database Design & SQL Course (Materi Video Terlengkap)",
+        "url": "https://www.youtube.com/watch?v=HXV3zeQKqGY"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4105-basis-data/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4105.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4105"
+  },
+  {
+    "code": "MKDI4202",
+    "name": "Belajar di Era Digital",
+    "semester": 3,
+    "description": "Mempelajari metode pembelajaran mandiri memanfaatkan teknologi informasi, literasi informasi digital, serta kolaborasi online.",
+    "topics": [
+      "Literasi Digital & Cyber Security Kesadaran",
+      "Pencarian Informasi Akademik Kredibel",
+      "Teknologi Kolaborasi Online",
+      "Manajemen Waktu Belajar Mandiri"
+    ],
+    "study_tips": "Pelajari cara menyaring sumber informasi ilmiah yang tepercaya di internet.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/mkdi4202-belajar-di-era-digital/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/MKDI4202.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/mkdi4202"
+  },
+  {
+    "code": "STIK4111",
+    "name": "Dasar Pemrograman R",
+    "semester": 3,
+    "description": "Mempelajari dasar pemrograman fungsional menggunakan bahasa R untuk analisis data statistika dasar dan visualisasi grafik.",
+    "topics": [
+      "Sintaks R & Tipe Data",
+      "Vektor, Matriks, & Data Frame di R",
+      "Struktur Kendali & Fungsi",
+      "Visualisasi Data dengan ggplot2",
+      "Analisis Regresi & Uji Hipotesis di R"
+    ],
+    "study_tips": "Instal RStudio dan latih cara memanipulasi data frame serta membuat grafik sederhana menggunakan ggplot2.",
+    "external_resources": [
+      {
+        "source": "RStudio Education",
+        "name": "R Programming Resources",
+        "url": "https://education.rstudio.com/"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stik4111-dasar-pemrograman-r/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STIK4111.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stik4111"
+  },
+  {
+    "code": "STSI4106",
+    "name": "Logika Informatika",
+    "semester": 3,
+    "description": "Mempelajari proposisi, tabel kebenaran, aljabar boolean, penyederhanaan gerbang logika, logika predikat, serta pembuktian validitas argumen.",
+    "topics": [
+      "Logika Proposisi & Operator",
+      "Tabel Kebenaran & Ekuivalensi",
+      "Aljabar Boolean & Gerbang Logika",
+      "Penyederhanaan Peta Karnaugh (K-Map)",
+      "Logika Predikat & Aturan Inferensi"
+    ],
+    "study_tips": "Fokus pada penguasaan tabel kebenaran dan hukum-hukum logika proposisi untuk menyederhanakan pernyataan majemuk.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4106-logika-informatika/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4106.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4106"
+  },
+  {
+    "code": "STSI4201",
+    "name": "Pemrograman Berbasis Desktop",
+    "semester": 3,
+    "description": "Mempelajari pembuatan aplikasi desktop menggunakan GUI event-driven programming (seperti C# .NET atau Java Swing/JavaFX).",
+    "topics": [
+      "Arsitektur Aplikasi Desktop",
+      "Event-Driven Programming Concepts",
+      "Perancangan Form & Komponen UI",
+      "Koneksi Database Desktop (ADO.NET/JDBC)",
+      "Deploy & Packaging Aplikasi Desktop"
+    ],
+    "study_tips": "Pahami alur siklus hidup Form dan bagaimana menghandle Event Click/Keyboard.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4201-pemrograman-berbasis-desktop/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4201.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4201"
+  },
+  {
+    "code": "STSI4202",
+    "name": "Rekayasa Perangkat Lunak",
+    "semester": 3,
+    "description": "Mempelajari prinsip-prinsip rekayasa pembuatan software berkualitas tinggi, manajemen proyek perangkat lunak, estimasi biaya, pengujian (testing), serta pemeliharaan software.",
+    "topics": [
+      "Pengenalan Software Engineering & Metodologi",
+      "Software Requirements Engineering (Fungsional & Non-Fungsional)",
+      "Software Design & Arsitektur Perangkat Lunak",
+      "Software Quality Assurance (SQA) & Standar Kualitas",
+      "Software Testing (White-Box, Black-Box, Unit Testing, Integration Testing)",
+      "Manajemen Proyek Software (Estimasi COCOMO, Gantt Chart)",
+      "Software Evolution, Maintenance, & Refactoring"
+    ],
+    "study_tips": "Pahami pembagian Software Testing (perbedaan Black-box dan White-box testing) serta tahapan dalam SDLC. Latih juga logika penghitungan estimasi proyek sederhana.",
+    "external_resources": [
+      {
+        "source": "GeeksforGeeks",
+        "name": "Software Engineering Tutorial & Cheat Sheet",
+        "url": "https://www.geeksforgeeks.org/software-engineering/"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4202-rekayasa-perangkat-lunak/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4202.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4202"
+  },
+  {
+    "code": "STSI4203",
+    "name": "Interaksi Manusia dan Komputer",
+    "semester": 3,
+    "description": "Mempelajari desain antarmuka pengguna yang ramah (user-friendly), aspek kognitif pengguna, kegunaan (usability), serta evaluasi heuristik UI/UX.",
+    "topics": [
+      "Prinsip Usability & User Experience (UX)",
+      "Aspek Manusia (Kognitif, Sensorik, Motorik)",
+      "User-Centered Design (UCD) Process",
+      "Prototyping & Wireframing",
+      "Evaluasi Heuristik & User Testing"
+    ],
+    "study_tips": "Pahami 10 prinsip Nielsen Heuristics dalam evaluasi antarmuka aplikasi.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4203-interaksi-manusia-dan-komputer/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4203.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4203"
+  },
+  {
+    "code": "STSI4205",
+    "name": "Jaringan Komputer",
+    "semester": 3,
+    "description": "Mempelajari dasar arsitektur jaringan komputer, model referensi OSI & TCP/IP, IP Address sub-netting, routing, switching, serta protokol aplikasi.",
+    "topics": [
+      "Model OSI 7 Layer & TCP/IP",
+      "Physical & Data Link Layer (Ethernet, MAC Address)",
+      "Network Layer (IP Addressing & Subnetting CIDR)",
+      "Routing Dinamis & Statis",
+      "Transport Layer (TCP vs UDP)",
+      "Application Layer (DNS, HTTP, FTP, DHCP)"
+    ],
+    "study_tips": "Pelajari rumus perhitungan Subnetting (mencari range IP, IP Network, IP Broadcast, & subnet mask) karena ini adalah tipe soal hitungan wajib di UAS.",
+    "external_resources": [
+      {
+        "source": "Cisco Networking Academy",
+        "name": "Intro to Networks Resources",
+        "url": "https://www.netacad.com/"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4205-jaringan-komputer/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4205.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4205"
+  },
+  {
+    "code": "EMBS4207",
+    "name": "Perilaku Organisasi",
+    "semester": 4,
+    "description": "Mempelajari dinamika individu, kelompok, motivasi, kepemimpinan, konflik, serta struktur organisasi dalam memengaruhi kinerja perusahaan.",
+    "topics": [
+      "Perilaku Individu di Tempat Kerja",
+      "Motivasi & Kepuasan Kerja",
+      "Dinamika Kelompok & Kerja Tim",
+      "Kepemimpinan (Leadership) & Kekuasaan",
+      "Budaya Organisasi & Manajemen Perubahan"
+    ],
+    "study_tips": "Pahami teori-teori motivasi (Maslow, Herzberg) dan tipe kepemimpinan organisasi.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/embs4207-perilaku-organisasi/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/EMBS4207.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/embs4207"
+  },
+  {
+    "code": "MKDI4203",
+    "name": "Kewirausahaan di Era Digital",
+    "semester": 4,
+    "description": "Mempelajari konsep kewirausahaan digital (technopreneurship), analisis pasar online, rancangan startup, business model canvas (BMC), dan pemasaran digital.",
+    "topics": [
+      "Technopreneurship Concepts",
+      "Analisis Peluang Pasar Digital",
+      "Perancangan Business Model Canvas (BMC)",
+      "Digital Marketing & Branding",
+      "Financing & Startup Pitching"
+    ],
+    "study_tips": "Pahami 9 blok dalam Business Model Canvas (BMC). Sering menjadi topik tugas besar.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/mkdi4203-kewirausahaan-di-era-digital/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/MKDI4203.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/mkdi4203"
+  },
+  {
+    "code": "STSI4204",
+    "name": "Analisis dan Visualisasi Data",
+    "semester": 4,
+    "description": "Mempelajari cara mengeksplorasi data, membersihkan data kotor, serta membuat grafik visualisasi data yang informatif menggunakan tools (seperti Tableau, PowerBI, atau Python seaborn).",
+    "topics": [
+      "Data Prep & Cleaning (Data Cleansing)",
+      "Analisis Data Eksploratif (EDA)",
+      "Prinsip Desain Visualisasi Data",
+      "Pembuatan Dashboard Interaktif",
+      "Komunikasi Data & Storytelling"
+    ],
+    "study_tips": "Pelajari tipe grafik yang sesuai untuk setiap jenis data (misal: Line chart untuk tren waktu, Bar chart untuk komparasi).",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4204-analisis-dan-visualisasi-data/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4204.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4204"
+  },
+  {
+    "code": "STSI4206",
+    "name": "Proses Bisnis",
+    "semester": 4,
+    "description": "Mempelajari pemodelan dan analisis alur aktivitas bisnis perusahaan menggunakan notasi standar BPMN (Business Process Model and Notation).",
+    "topics": [
+      "Konsep Business Process Management (BPM)",
+      "Identifikasi & Pemetaan Proses Bisnis",
+      "Notasi BPMN (Events, Activities, Gateways, Pools, Lanes)",
+      "Analisis Kinerja Proses Bisnis",
+      "Redesain & Otomasi Proses Bisnis"
+    ],
+    "study_tips": "Latih kemampuan menggambar diagram BPMN untuk alur transaksi tertentu (misalnya alur pembelian barang).",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4206-proses-bisnis/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4206.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4206"
+  },
+  {
+    "code": "STSI4207",
+    "name": "Sistem Informasi Manajemen",
+    "semester": 4,
+    "description": "Mempelajari bagaimana sistem informasi digunakan sebagai alat strategis manajemen untuk pengambilan keputusan dan optimalisasi operasional bisnis.",
+    "topics": [
+      "Peran SI dalam Organisasi Modern",
+      "Sistem Enterprise (ERP, SCM, CRM)",
+      "Decision Support Systems (DSS) & Business Intelligence",
+      "Keamanan Global & Tata Kelola Sistem",
+      "Etika Sosial dalam Sistem Informasi"
+    ],
+    "study_tips": "Fokus pada integrasi sistem seperti ERP, CRM, dan SCM. Pahami tujuan masing-masing sistem dalam bisnis.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4207-sistem-informasi-manajemen/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4207.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4207"
+  },
+  {
+    "code": "STSI4208",
+    "name": "Analisis dan Perancangan Sistem",
+    "semester": 4,
+    "description": "Mempelajari siklus hidup pengembangan sistem (SDLC), analisis sistem berjalan, serta metode perancangan sistem menggunakan pemodelan terstruktur (DFD) dan berorientasi objek (UML).",
+    "topics": [
+      "System Development Life Cycle (SDLC) - Waterfall, Agile, Scrum",
+      "Studi Kelayakan Sistem & Analisis Kebutuhan",
+      "Pemodelan Aliran Data Terstruktur (Data Flow Diagram / DFD)",
+      "Kamus Data (Data Dictionary) & Spesifikasi Proses",
+      "Pemodelan Berorientasi Objek dengan UML (Use Case, Class, Sequence Diagram)",
+      "Perancangan Antarmuka Pengguna (UI/UX) & Output Sistem",
+      "Strategi Implementasi, Pengujian, & Migrasi Sistem"
+    ],
+    "study_tips": "Pelajari dengan saksama perbedaan diagram DFD dan UML. Anda harus paham cara membuat Use Case Diagram dan Sequence Diagram.",
+    "external_resources": [
+      {
+        "source": "Visual Paradigm",
+        "name": "UML Diagram Guide & Tutorial",
+        "url": "https://www.visual-paradigm.com/guide/uml-tutorials/"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4208-analisis-dan-perancangan-sistem/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4208.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4208"
+  },
+  {
+    "code": "STSI4209",
+    "name": "Pemrograman Berbasis Web",
+    "semester": 4,
+    "description": "Mempelajari perancangan halaman web dinamis di sisi client (frontend) menggunakan HTML, CSS, JavaScript, serta interaksi basis data di sisi server (backend) menggunakan PHP/Node.js.",
+    "topics": [
+      "Struktur Dokumen Web & Tag HTML5",
+      "Styling Web & Responsive Layout dengan CSS3 & Flexbox/Grid",
+      "Logika Pemrograman Sisi Klien menggunakan JavaScript Dasar & DOM",
+      "Pengenalan Pemrograman Sisi Server (PHP / Node.js)",
+      "Koneksi Aplikasi Web ke Basis Data MySQL/PostgreSQL",
+      "Manajemen State (Cookies, Sessions, JWT)",
+      "Konsep Keamanan Web (Menghindari SQL Injection & XSS)"
+    ],
+    "study_tips": "Praktik adalah kunci utama lulus nilai A. Buatlah website portofolio sederhana menggunakan HTML/CSS/JS, lalu hubungkan dengan database local.",
+    "external_resources": [
+      {
+        "source": "MDN Web Docs",
+        "name": "Web Developer Documentation & Guides",
+        "url": "https://developer.mozilla.org/"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4209-pemrograman-berbasis-web/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4209.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4209"
+  },
+  {
+    "code": "EMBS4102",
+    "name": "Pengantar Bisnis",
+    "semester": 5,
+    "description": "Mempelajari dasar organisasi bisnis, manajemen produksi, pemasaran, keuangan, serta tantangan bisnis global.",
+    "topics": [
+      "Bentuk Kepemilikan Bisnis",
+      "Kewirausahaan & Bisnis Kecil",
+      "Manajemen Operasional & Mutu",
+      "Strategi Pemasaran & Perilaku Konsumen",
+      "Manajemen Keuangan & Akuntansi Dasar"
+    ],
+    "study_tips": "Pelajari bentuk-bentuk kepemilikan bisnis (PT, CV, Koperasi) beserta kelebihan dan kekurangannya.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/embs4102-pengantar-bisnis/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/EMBS4102.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/embs4102"
+  },
+  {
+    "code": "FSAP4102",
+    "name": "Teori Organisasi",
+    "semester": 5,
+    "description": "Mempelajari teori evolusi organisasi, desain struktur birokrasi, interaksi organisasi dengan lingkungan, serta efektivitas efisiensi organisasi.",
+    "topics": [
+      "Evolusi Teori Organisasi",
+      "Lingkungan Organisasi & Ketidakpastian",
+      "Struktur & Desain Organisasi",
+      "Birokrasi & Ukuran Organisasi",
+      "Kekuasaan, Politik, & Konflik Organisasi"
+    ],
+    "study_tips": "Pahami perbedaan organisasi mekanistik (kaku) dan organik (fleksibel).",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/fsap4102-teori-organisasi/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/FSAP4102.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/fsap4102"
+  },
+  {
+    "code": "FSSI4101",
+    "name": "Basic Reading",
+    "semester": 5,
+    "description": "Meningkatkan kemampuan memahami bacaan teks bahasa Inggris umum dengan metode scanning, skimming, dan inferencing.",
+    "topics": [
+      "Skimming for Main Ideas",
+      "Scanning for Specific Details",
+      "Context Clues for Vocabulary",
+      "Making Inferences from Text",
+      "Summarizing Passages"
+    ],
+    "study_tips": "Latih teknik membaca cepat untuk menemukan ide pokok artikel.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/fssi4101-basic-reading/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/FSSI4101.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/fssi4101"
+  },
+  {
+    "code": "STMA4111",
+    "name": "Kalkulus Diferensial",
+    "semester": 5,
+    "description": "Mempelajari kalkulus tingkat lanjut yang berfokus pada limit, kekontinuan fungsi, teknik turunan, dan aplikasinya dalam optimasi.",
+    "topics": [
+      "Limit & Kekontinuan Fungsi",
+      "Aturan Turunan & Rantai",
+      "Turunan Fungsi Transenden (Trigonometri, Logaritma)",
+      "Aplikasi Turunan (Maksimum & Minimum)",
+      "Teorema Nilai Rata-rata"
+    ],
+    "study_tips": "Seringlah berlatih menurunkan fungsi implisit dan trigonometri.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stma4111-kalkulus-diferensial/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STMA4111.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stma4111"
+  },
+  {
+    "code": "STSI4301",
+    "name": "Sistem Pendukung Keputusan",
+    "semester": 5,
+    "description": "Mempelajari metode dan arsitektur sistem pengambil keputusan menggunakan algoritma komputasi (AHP, SAW, TOPSIS, PROMETHEE).",
+    "topics": [
+      "Konsep Pengambilan Keputusan & SPK",
+      "Arsitektur & Komponen SPK",
+      "Metode Multi-Criteria Decision Making (MCDM)",
+      "Metode Analytical Hierarchy Process (AHP)",
+      "Metode Simple Additive Weighting (SAW) & TOPSIS",
+      "Sistem Berbasis Aturan & Pengenalan AI dalam SPK"
+    ],
+    "study_tips": "Kuasai cara perhitungan matriks perbandingan berpasangan pada metode AHP. Biasanya sering ditanyakan di tugas kuliah.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4301-sistem-pendukung-keputusan/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4301.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4301"
+  },
+  {
+    "code": "STSI4302",
+    "name": "Administrasi Server",
+    "semester": 5,
+    "description": "Mempelajari cara instalasi, konfigurasi, pemeliharaan server berbasis Linux/Windows, serta manajemen layanan jaringan (Web, DNS, Mail, DHCP).",
+    "topics": [
+      "Instalasi OS Server (Linux Server)",
+      "Manajemen User & File Permissions (chmod, chown)",
+      "Konfigurasi DNS Server (BIND9) & Web Server (Apache/Nginx)",
+      "Konfigurasi DHCP & FTP Server",
+      "Monitoring Kinerja Server & Backup System",
+      "Keamanan Server (Firewall, SSH Keys)"
+    ],
+    "study_tips": "Gunakan VPS murah atau VirtualBox untuk mempraktikkan konfigurasi Nginx dan bind9 secara hands-on di Ubuntu Server.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4302-administrasi-server/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4302.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4302"
+  },
+  {
+    "code": "STSI4303",
+    "name": "Pemrograman Berbasis Perangkat Bergerak",
+    "semester": 5,
+    "description": "Mempelajari pembuatan aplikasi mobile (Android/iOS) menggunakan framework native (Kotlin/Swift) atau cross-platform (Flutter/React Native).",
+    "topics": [
+      "Arsitektur & Lifecycle Aplikasi Mobile",
+      "Layouting & UI Components",
+      "Navigasi & Passing Data antar Screen",
+      "Koneksi API / Web Services (Retrofit/Axios)",
+      "Penyimpanan Lokal (SQLite, Shared Preferences)",
+      "State Management & Deployment ke App Store/Play Store"
+    ],
+    "study_tips": "Buat project mobile sederhana yang melakukan fetch data JSON dari REST API publik lalu tampilkan dalam Recycler View.",
+    "external_resources": [
+      {
+        "source": "Android Developers",
+        "name": "Kotlin & Android Studio Guide",
+        "url": "https://developer.android.com/"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4303-pemrograman-berbasis-perangkat-bergerak/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4303.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4303"
+  },
+  {
+    "code": "STSI4308",
+    "name": "Komunikasi Bisnis dan Teknis",
+    "semester": 5,
+    "description": "Mempelajari penulisan laporan teknis, proposal bisnis, korespondensi email profesional, serta teknik presentasi laporan kepada stakeholder.",
+    "topics": [
+      "Prinsip Komunikasi Profesional",
+      "Penulisan Laporan Teknis (Technical Report)",
+      "Penyusunan Proposal Proyek",
+      "Korespondensi Email & Dokumen Bisnis",
+      "Teknik Presentasi & Negosiasi Stakeholder"
+    ],
+    "study_tips": "Fokus pada kaidah tata bahasa formal dan penyusunan struktur laporan proyek TI yang baik.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4308-komunikasi-bisnis-dan-teknis/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4308.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4308"
+  },
+  {
+    "code": "EMBS4101",
+    "name": "Manajemen",
+    "semester": 6,
+    "description": "Mempelajari fungsi-fungsi manajemen dasar (Planning, Organizing, Leading, Controlling) dalam organisasi.",
+    "topics": [
+      "Fungsi Perencanaan (Planning)",
+      "Fungsi Pengorganisasian (Organizing)",
+      "Fungsi Pengarahan (Leading)",
+      "Fungsi Pengawasan (Controlling)",
+      "Manajemen Strategis & Operasional"
+    ],
+    "study_tips": "Pahami 4 fungsi utama manajemen (POAC) dan implementasinya.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/embs4101-manajemen/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/EMBS4101.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/embs4101"
+  },
+  {
+    "code": "MKKI4301",
+    "name": "Pemberdayaan Masyarakat",
+    "semester": 6,
+    "description": "Mempelajari konsep pembangunan masyarakat, partisipasi sosial, serta peran teknologi informasi dalam pemberdayaan komunitas.",
+    "topics": [
+      "Konsep Pemberdayaan Komunitas",
+      "Metodologi Participatory Rural Appraisal (PRA)",
+      "Peran TIK untuk Pemberdayaan (ICT4D)",
+      "Evaluasi Dampak Program Pemberdayaan"
+    ],
+    "study_tips": "Pelajari contoh kasus penerapan ICT4D (Information and Communication Technologies for Development) di Indonesia.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/mkki4301-pemberdayaan-masyarakat/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/MKKI4301.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/mkki4301"
+  },
+  {
+    "code": "STPL4211",
+    "name": "Sistem Informasi Perencanaan",
+    "semester": 6,
+    "description": "Mempelajari perancangan sistem informasi geografis (SIG) dan tata ruang untuk perencanaan pembangunan wilayah.",
+    "topics": [
+      "Konsep Dasar Perencanaan Wilayah",
+      "Sistem Informasi Geografis (SIG/GIS) Basis",
+      "Pemetaan Digital & Sumber Data Spasial",
+      "Implementasi SIP dalam Perencanaan Daerah"
+    ],
+    "study_tips": "Pahami konsep layering data spasial dan perangkat lunak SIG (seperti QGIS).",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stpl4211-sistem-informasi-perencanaan/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STPL4211.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stpl4211"
+  },
+  {
+    "code": "STSI4304",
+    "name": "Dasar Infrastruktur TI",
+    "semester": 6,
+    "description": "Mempelajari konsep komponen infrastruktur teknologi informasi modern, mencakup data center, virtualisasi, cloud computing, server, dan jaringan.",
+    "topics": [
+      "Evolusi Infrastruktur TI",
+      "Komponen Server, Data Center & Listrik Cadangan",
+      "Konsep Virtualisasi (Hypervisor)",
+      "Cloud Computing (IaaS, PaaS, SaaS)",
+      "Infrastruktur Jaringan & Bandwidth Management",
+      "Manajemen Layanan Infrastruktur TI"
+    ],
+    "study_tips": "Pahami perbedaan komputasi awan tipe IaaS, PaaS, dan SaaS beserta contoh layanannya di dunia nyata (seperti AWS, Heroku, Google Workspace).",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4304-dasar-infrastruktur-ti/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4304.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4304"
+  },
+  {
+    "code": "STSI4305",
+    "name": "Etika Profesi",
+    "semester": 6,
+    "description": "Mempelajari aspek hukum, etika, dan tanggung jawab sosial bagi profesional di bidang teknologi informasi, mencakup UU ITE dan Hak Kekayaan Intelektual.",
+    "topics": [
+      "Pengenalan Etika & Moral Profesional",
+      "Kode Etik Profesi TI (ACM, IEEE)",
+      "Hak Kekayaan Intelektual (HAKI, Hak Cipta, Paten)",
+      "Aspek Hukum TI di Indonesia (UU ITE)",
+      "Kejahatan Siber (Cyber Crime) & Etika Penggunaan Data"
+    ],
+    "study_tips": "Fokus pada pemahaman pasal-pasal penting dalam UU ITE dan perlindungan data pribadi (PDP).",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4305-etika-profesi/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4305.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4305"
+  },
+  {
+    "code": "STSI4306",
+    "name": "Arsitektur dan Perancangan Sistem Enterprise",
+    "semester": 6,
+    "description": "Mempelajari perencanaan arsitektur TI perusahaan secara menyeluruh menggunakan framework standar (TOGAF atau Zachman).",
+    "topics": [
+      "Pengenalan Enterprise Architecture (EA)",
+      "Framework EA (TOGAF ADM, Zachman)",
+      "Arsitektur Bisnis (Business Architecture)",
+      "Arsitektur Data & Aplikasi",
+      "Arsitektur Teknologi & Infrastruktur",
+      "Rencana Implementasi & Migrasi EA"
+    ],
+    "study_tips": "Kuasai tahapan siklus TOGAF ADM (Architecture Development Method) dari Fase Prelim hingga Manajemen Perubahan.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4306-arsitektur-dan-perancangan-sistem-enterprise/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4306.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4306"
+  },
+  {
+    "code": "STSI4307",
+    "name": "Data Mining",
+    "semester": 6,
+    "description": "Mempelajari algoritma penemuan pola tersembunyi dari sekumpulan data besar (klasifikasi, klasterisasi, dan asosiasi).",
+    "topics": [
+      "Proses KDD (Knowledge Discovery in Databases)",
+      "Preprocessing Data (Cleaning, Integrasi, Reduksi)",
+      "Algoritma Klasifikasi (Naives Bayes, Decision Tree, KNN)",
+      "Algoritma Klasterisasi (K-Means, Hierarchical Clustering)",
+      "Aturan Asosiasi (Apriori Algorithm)",
+      "Evaluasi Model Data Mining (Akurasi, Presisi, Recall)"
+    ],
+    "study_tips": "Pelajari langkah perhitungan matematis algoritma K-Means dan Naive Bayes secara manual untuk mempersiapkan diri menghadapi UAS.",
+    "external_resources": [
+      {
+        "source": "W3Schools",
+        "name": "Machine Learning / Data Science Intro",
+        "url": "https://www.w3schools.com/python/python_ml_getting_started.asp"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4307-data-mining/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4307.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4307"
+  },
+  {
+    "code": "STSI4309",
+    "name": "Administrasi Jaringan",
+    "semester": 6,
+    "description": "Mempelajari instalasi, monitoring, dan manajemen perangkat jaringan aktif (Router & Switch), serta keamanan keamanan jaringan.",
+    "topics": [
+      "Manajemen Perangkat MikroTik / Cisco Router",
+      "Virtual Local Area Network (VLAN) Setup",
+      "Access Control List (ACL) & NAT",
+      "Monitoring Lalu Lintas Jaringan (SNMP, Wireshark)",
+      "Konfigurasi Firewall & Intrusion Detection Systems"
+    ],
+    "study_tips": "Gunakan Cisco Packet Tracer atau GNS3 untuk menyimulasikan topologi jaringan dan konfigurasi routing dinamis.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4309-administrasi-jaringan/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4309.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4309"
+  },
+  {
+    "code": "STSI4310",
+    "name": "Metodologi Penelitian",
+    "semester": 6,
+    "description": "Mempelajari metode riset ilmiah bidang sistem informasi, perumusan masalah, tinjauan pustaka, pengumpulan data, serta penulisan draf proposal skripsi.",
+    "topics": [
+      "Karakteristik Riset Sistem Informasi",
+      "Perumusan Masalah & Hipotesis",
+      "Tinjauan Pustaka & Pencarian Jurnal (Google Scholar, Scopus)",
+      "Metode Pengumpulan Data (Kuesioner, Observasi)",
+      "Metode Analisis Data (Kualitatif & Kuantitatif)",
+      "Format Penulisan Laporan Ilmiah & Plagiarisme"
+    ],
+    "study_tips": "Sangat penting sebagai bekal pembuatan Karya Ilmiah (Karil) semester depan. Mulailah memikirkan topik penelitian yang ingin Anda kaji.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4310-metodologi-penelitian/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4310.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4310"
+  },
+  {
+    "code": "STDA4101",
+    "name": "Pengantar Sains Data",
+    "semester": 7,
+    "description": "Mempelajari dasar analisis data ilmiah, pengumpulan data, pengolahan statistik, machine learning dasar, dan visualisasi visualisasi data menggunakan Python.",
+    "topics": [
+      "Introduction to Data Science Workflow",
+      "Python Data Science Libraries (NumPy, Pandas, Matplotlib)",
+      "Supervised vs Unsupervised Learning",
+      "Regresi & Klasifikasi Dasar",
+      "Data Science Ethics & Communication"
+    ],
+    "study_tips": "Fokus pada pemanfaatan library Pandas untuk manipulasi tabel data di Python Jupyter Notebook.",
+    "external_resources": [
+      {
+        "source": "Kaggle",
+        "name": "Data Science Courses & Competitions",
+        "url": "https://www.kaggle.com/"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stda4101-pengantar-sains-data/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STDA4101.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stda4101"
+  },
+  {
+    "code": "STSI4402",
+    "name": "Tata Kelola Teknologi Informasi",
+    "semester": 7,
+    "description": "Mempelajari tata kelola TI tingkat korporat untuk memastikan investasi teknologi sejalan dengan strategi bisnis (menggunakan COBIT).",
+    "topics": [
+      "Definisi & Pentingnya IT Governance",
+      "Framework COBIT (COBIT 5 / COBIT 2019)",
+      "Penyelarasan Strategi TI dengan Bisnis (Alignment)",
+      "Manajemen Risiko TI & Pengukuran Nilai TI (IT Value)",
+      "Audit Sistem Informasi dengan COBIT"
+    ],
+    "study_tips": "Pahami perbedaan tata kelola (governance) dan manajemen (management) dalam COBIT, serta 5 prinsip utama COBIT 5.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4402-tata-kelola-teknologi-informasi/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4402.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4402"
+  },
+  {
+    "code": "STSI4403",
+    "name": "Manajemen Resiko dan Audit Sistem Informasi",
+    "semester": 7,
+    "description": "Mempelajari teknik identifikasi risiko TI, pengendalian internal, serta audit keamanan sistem informasi berbasis standar industri.",
+    "topics": [
+      "Konsep Risiko TI & Manajemen Risiko (ISO 31000)",
+      "Pengendalian Internal SI (General & Application Controls)",
+      "Tahapan Audit Sistem Informasi",
+      "Audit Keamanan Informasi & Log Analysis",
+      "Penyusunan Laporan Temuan Audit"
+    ],
+    "study_tips": "Pelajari tahapan pengumpulan bukti audit (evidence collection) dan teknik wawancara audit.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4403-manajemen-resiko-dan-audit-sistem-informasi/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4403.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4403"
+  },
+  {
+    "code": "STSI4404",
+    "name": "Keamanan Jaringan",
+    "semester": 7,
+    "description": "Mempelajari proteksi transmisi data dan infrastruktur jaringan dari penyusupan, mencakup firewall, enkripsi data, VPN, dan deteksi intrusi.",
+    "topics": [
+      "Network Security Threats & Vulnerabilities",
+      "Kriptografi untuk Protokol Jaringan (IPSec, SSL/TLS)",
+      "Firewall Architectures & DMZ Setup",
+      "Intrusion Detection & Prevention Systems (IDS/IPS)",
+      "Wireless Network Security (WPA2/WPA3)"
+    ],
+    "study_tips": "Pahami cara kerja jabat tangan (handshake) SSL/TLS untuk enkripsi web HTTPS.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4404-keamanan-jaringan/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4404.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4404"
+  },
+  {
+    "code": "STSI4409",
+    "name": "Data Warehouse",
+    "semester": 7,
+    "description": "Mempelajari perancangan basis data skala besar yang digunakan khusus untuk analisis bisnis (OLAP), mencakup proses ETL (Extract, Transform, Load).",
+    "topics": [
+      "Perbedaan OLTP vs OLAP",
+      "Arsitektur & Komponen Data Warehouse",
+      "Pemodelan Dimensi (Star Schema, Snowflake Schema)",
+      "Proses ETL (Extract, Transform, Load) Concepts",
+      "Konsep Data Mart & Implementasi OLAP Cube"
+    ],
+    "study_tips": "Kuasai perbedaan bentuk Star Schema (tabel dimensi langsung terhubung ke tabel fakta) dan Snowflake Schema.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4409-data-warehouse/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4409.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4409"
+  },
+  {
+    "code": "STSI4440",
+    "name": "Capstone Project",
+    "semester": 7,
+    "description": "Mata kuliah tugas akhir praktis terintegrasi di mana mahasiswa merancang dan membangun solusi sistem informasi nyata untuk menyelesaikan masalah suatu organisasi.",
+    "topics": [
+      "Identifikasi Masalah Organisasi Nyata",
+      "Analisis Kebutuhan & Desain Solusi Sistem",
+      "Pembuatan Prototipe / Aplikasi Jadi",
+      "Pengujian Sistem & Dokumentasi Laporan Proyek"
+    ],
+    "study_tips": "Selesaikan proyek ini secara tim dengan manajemen waktu yang baik. Pastikan aplikasi berjalan lancar saat didemokan ke penguji.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4440-capstone-project/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4440.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4440"
+  },
+  {
+    "code": "EACC4207",
+    "name": "Sistem Informasi Akuntansi",
+    "semester": 8,
+    "description": "Mempelajari alur transaksi keuangan perusahaan (siklus penjualan, pembelian, penggajian) yang diotomatisasi dengan sistem informasi komputer.",
+    "topics": [
+      "Siklus Transaksi Keuangan (Pendapatan, Pengeluaran, Produksi)",
+      "Pengendalian Internal SIA",
+      "Perancangan Bagan Akun (Chart of Accounts)",
+      "Pelaporan Keuangan Otomatis & Audit Trail"
+    ],
+    "study_tips": "Pahami diagram alur dokumen (document flowchart) untuk siklus transaksi penjualan barang.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/eacc4207-sistem-informasi-akuntansi/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/EACC4207.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/eacc4207"
+  },
+  {
+    "code": "STSI4405",
+    "name": "Keamanan Sistem Informasi",
+    "semester": 8,
+    "description": "Mempelajari prinsip keamanan komputer, ancaman keamanan SI, kriptografi (simetris & asimetris), keamanan jaringan, kebijakan keamanan organisasi, serta penanganan insiden siber.",
+    "topics": [
+      "Prinsip CIA Triad (Confidentiality, Integrity, Availability)",
+      "Jenis Ancaman: Malware, Phishing, DDoS, Social Engineering",
+      "Kriptografi Dasar: Algoritma Enkripsi Simetris (AES) & Asimetris (RSA/ECC)",
+      "Digital Signature, Hash Function, & Certificate Authority (SSL/TLS)",
+      "Keamanan Jaringan (Firewall, IDS/IPS, VPN)",
+      "Kontrol Akses & Autentikasi (MFA, Biometrik, RBAC)",
+      "Audit Keamanan, Manajemen Risiko, & Security Policy ISO 27001"
+    ],
+    "study_tips": "Pahami dengan baik definisi dan implementasi CIA Triad. Pelajari bagaimana sistem kriptografi kunci publik bekerja.",
+    "external_resources": [
+      {
+        "source": "Cybrary",
+        "name": "Cybersecurity Fundamentals Courses",
+        "url": "https://www.cybrary.it/"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4405-keamanan-sistem-informasi/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4405.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4405"
+  },
+  {
+    "code": "STSI4406",
+    "name": "Manajemen Proyek Sistem Informasi",
+    "semester": 8,
+    "description": "Mempelajari manajemen siklus proyek teknologi informasi, estimasi jadwal kerja (WBS, Critical Path), alokasi SDM, serta manajemen risiko proyek.",
+    "topics": [
+      "Project Management Integration & Scope Management",
+      "Time & Schedule Management (WBS, PERT/CPM)",
+      "Cost & Quality Management (Earned Value Analysis)",
+      "HR, Communication, & Risk Management",
+      "Project Closure & Post-Implementation Review"
+    ],
+    "study_tips": "Pelajari cara menggambar diagram AON (Activity on Node) dan mencari Jalur Kritis (Critical Path Method) proyek.",
+    "external_resources": [
+      {
+        "source": "Project Management Institute (PMI)",
+        "name": "PMBOK Guide Resources",
+        "url": "https://www.pmi.org/"
+      }
+    ],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4406-manajemen-proyek-sistem-informasi/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4406.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4406"
+  },
+  {
+    "code": "STSI4407",
+    "name": "Manajemen Layanan Teknologi Informasi",
+    "semester": 8,
+    "description": "Mempelajari pengelolaan penyediaan layanan TI agar sesuai dengan kebutuhan operasional pengguna (menggunakan framework ITIL).",
+    "topics": [
+      "Konsep Service Management & ITIL Framework",
+      "Service Strategy & Service Design",
+      "Service Transition & Service Operation (Incident & Problem Management)",
+      "Continual Service Improvement (CSI)",
+      "Service Level Agreement (SLA) & Service Desk"
+    ],
+    "study_tips": "Pahami siklus hidup layanan ITIL (Strategy, Design, Transition, Operation, CSI) dan perbedaan Insiden dan Masalah.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4407-manajemen-layanan-teknologi-informasi/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4407.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4407"
+  },
+  {
+    "code": "STSI4408",
+    "name": "E-Bisnis",
+    "semester": 8,
+    "description": "Mempelajari strategi pemanfaatan internet dan teknologi digital untuk mengubah proses bisnis internal, rantai pasok, dan hubungan pelanggan (B2B, B2C).",
+    "topics": [
+      "Definisi & Evolusi E-Bisnis vs E-Commerce",
+      "Model Bisnis Digital (B2B, B2C, C2C, G2C)",
+      "Infrastruktur E-Bisnis & Mobile Commerce",
+      "Strategi Pemasaran E-Bisnis & CRM",
+      "Sistem Pembayaran Elektronik (E-Payment) & Keamanan"
+    ],
+    "study_tips": "Pelajari perbedaan model bisnis e-commerce (seperti Shopee sebagai C2C, Blibli sebagai B2C) serta alur supply chain digital.",
+    "external_resources": [],
+    "rbv_link": "https://pustaka.ut.ac.id/lib/stsi4408-e-bisnis/",
+    "repo_link": "http://repository.ut.ac.id/view/subjects/STSI4408.html",
+    "ocw_link": "http://www.ocw.ut.ac.id/course/stsi4408"
+  }
+]

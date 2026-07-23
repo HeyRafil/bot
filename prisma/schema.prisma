@@ -1,0 +1,345 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String        @id @default(uuid())
+  username     String        @unique
+  passwordHash String
+  roleId       String
+  role         Role          @relation(fields: [roleId], references: [id])
+  sessions     Session[]
+  apiKeys      ApiKey[]
+  activityLogs ActivityLog[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("users")
+}
+
+model Role {
+  id          String       @id @default(uuid())
+  name        String       @unique // e.g. Owner, SuperAdmin, Admin, Moderator, Member
+  permissions Permission[]
+  users       User[]
+  createdAt   DateTime     @default(now())
+
+  @@map("roles")
+}
+
+model Permission {
+  id        String   @id @default(uuid())
+  action    String   @unique // e.g. "read:dashboard", "write:settings"
+  roles     Role[]
+  createdAt DateTime @default(now())
+
+  @@map("permissions")
+}
+
+model Group {
+  id           String        @id // WhatsApp JID (e.g. 123456@g.us)
+  name         String
+  description  String?
+  avatarUrl    String?
+  memberCount  Int           @default(0)
+  adminCount   Int           @default(0)
+  status       Boolean       @default(true) // Is active/monitored by bot
+  createdDate  DateTime      @default(now())
+  settings     GroupSetting?
+  members      GroupMember[]
+  messages     Message[]
+  warnings     Warning[]
+  commands     Command[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("groups")
+}
+
+model GroupSetting {
+  id                    String   @id @default(uuid())
+  groupId               String   @unique
+  group                 Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  welcomeEnabled        Boolean  @default(true)
+  welcomeStickerEnabled Boolean  @default(true)
+  welcomeMessage        String   @default("Selamat datang (user) di *(group)*\nSelamat berdiskusi")
+  antiLink         Boolean  @default(false)
+  antiSpam         Boolean  @default(false)
+  antiFlood        Boolean  @default(false)
+  antiToxic        Boolean  @default(false)
+  antiBadWord      Boolean  @default(false)
+  antiVirtex       Boolean  @default(false)
+  antiDelete       Boolean  @default(false)
+  antiEdit         Boolean  @default(false)
+  antiFakeNumber   Boolean  @default(false)
+  antiBot          Boolean  @default(false)
+  antiCall         Boolean  @default(false)
+  antiPromote      Boolean  @default(false)
+  antiDemote       Boolean  @default(false)
+  antiOpenGroup    Boolean  @default(false)
+  antiCloseGroup   Boolean  @default(false)
+  antiInvite       Boolean  @default(false)
+  antiMentionSpam  Boolean  @default(false)
+  antiMediaSpam    Boolean  @default(false)
+  antiStickerSpam  Boolean  @default(false)
+  aiEnabled        Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("group_settings")
+}
+
+model GroupMember {
+  id           String    @id @default(uuid())
+  groupId      String
+  group        Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  whatsappId   String    // Member WhatsApp number/ID
+  name         String?
+  avatarUrl    String?
+  role         String    @default("member") // admin, superadmin, moderator, member
+  messageCount Int       @default(0)
+  commandCount Int       @default(0)
+  joinDate     DateTime  @default(now())
+  lastSeen     DateTime?
+  warnings     Warning[]
+  quizScore    Int       @default(0)
+
+  @@unique([groupId, whatsappId])
+  @@map("group_members")
+}
+
+model Admin {
+  id         String   @id @default(uuid())
+  whatsappId String   @unique // Global admin settings/permission cache
+  role       String   @default("admin") // owner, superadmin, admin, moderator
+  name       String?
+  createdAt  DateTime @default(now())
+
+  @@map("admins")
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  whatsappId String   @unique // Message ID from WA
+  groupId    String?
+  group      Group?   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  senderId   String
+  senderName String?
+  body       String
+  mediaType  String?  // text, image, video, sticker, document, audio
+  timestamp  DateTime @default(now())
+
+  @@map("messages")
+}
+
+model Command {
+  id          String       @id @default(uuid())
+  name        String       @unique // e.g. kick, add, ai
+  description String?
+  groupId     String?
+  group       Group?       @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  useCount    Int          @default(0)
+  logs        CommandLog[]
+  createdAt   DateTime     @default(now())
+
+  @@map("commands")
+}
+
+model CommandLog {
+  id         String   @id @default(uuid())
+  commandId  String
+  command    Command  @relation(fields: [commandId], references: [id], onDelete: Cascade)
+  groupId    String?
+  whatsappId String   // User who ran it
+  status     String   @default("success") // success, failed
+  errorMsg   String?
+  timestamp  DateTime @default(now())
+
+  @@map("command_logs")
+}
+
+model Warning {
+  id         String       @id @default(uuid())
+  groupId    String
+  group      Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  memberId   String
+  member     GroupMember  @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  reason     String
+  timestamp  DateTime     @default(now())
+
+  @@map("warnings")
+}
+
+model Blacklist {
+  id         String   @id @default(uuid())
+  whatsappId String   @unique
+  reason     String?
+  createdAt  DateTime @default(now())
+
+  @@map("blacklist")
+}
+
+model Whitelist {
+  id         String   @id @default(uuid())
+  whatsappId String   @unique
+  reason     String?
+  createdAt  DateTime @default(now())
+
+  @@map("whitelist")
+}
+
+model Broadcast {
+  id           String         @id @default(uuid())
+  message      String
+  mediaType    String         @default("text") // text, image, video, document, sticker, voice
+  mediaUrl     String?
+  targetType   String         @default("all_groups") // all_groups, selected_groups, admins
+  targetGroups String         @default("[]") // JSON string of selected group IDs
+  scheduledAt  DateTime?      // If scheduled
+  status       String         @default("pending") // pending, sent, failed
+  logs         BroadcastLog[]
+  createdAt    DateTime       @default(now())
+
+  @@map("broadcasts")
+}
+
+model BroadcastLog {
+  id          String    @id @default(uuid())
+  broadcastId String
+  broadcast   Broadcast @relation(fields: [broadcastId], references: [id], onDelete: Cascade)
+  targetId    String    // Group JID or Admin ID
+  status      String    @default("success") // success, failed
+  errorMsg    String?
+  timestamp   DateTime  @default(now())
+
+  @@map("broadcast_logs")
+}
+
+model Plugin {
+  id          String         @id @default(uuid())
+  name        String         @unique
+  version     String
+  description String?
+  enabled     Boolean        @default(true)
+  settings    PluginSetting[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@map("plugins")
+}
+
+model PluginSetting {
+  id        String   @id @default(uuid())
+  pluginId  String
+  plugin    Plugin   @relation(fields: [pluginId], references: [id], onDelete: Cascade)
+  key       String
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([pluginId, key])
+  @@map("plugin_settings")
+}
+
+model Statistics {
+  id        String   @id @default(uuid())
+  key       String   @unique // e.g. "total_messages_today", "cpu_usage"
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@map("statistics")
+}
+
+model AutoReply {
+  id        String   @id @default(uuid())
+  keyword   String   @unique
+  response  String
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("auto_replies")
+}
+
+model AiHistory {
+  id         String   @id @default(uuid())
+  whatsappId String
+  groupId    String?
+  prompt     String
+  response   String
+  timestamp  DateTime @default(now())
+
+  @@map("ai_history")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token        String   @unique
+  refreshToken String   @unique
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  @@map("sessions")
+}
+
+model ApiKey {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  key       String   @unique
+  name      String
+  createdAt DateTime @default(now())
+
+  @@map("api_keys")
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  details   String?
+  ipAddress String?
+  timestamp DateTime @default(now())
+
+  @@map("activity_logs")
+}
+
+model Backup {
+  id        String   @id @default(uuid())
+  filename  String
+  type      String   // db, media, config
+  size      Int
+  status    String   @default("success")
+  createdAt DateTime @default(now())
+
+  @@map("backups")
+}
+
+model RegisteredUser {
+  id         String   @id @default(uuid())
+  whatsappId String   @unique
+  name       String
+  upbjj      String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("registered_users")
+}

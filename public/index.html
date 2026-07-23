@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UT Academic Assistant - Monitoring Dashboard</title>
+  <!-- Google Fonts Outfit & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #05070c;
+      --card-bg: rgba(17, 24, 39, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.05);
+      --text-main: #f8fafc;
+      --text-muted: #64748b;
+      --accent-primary: #6366f1;
+      --accent-primary-glow: rgba(99, 102, 241, 0.25);
+      --accent-success: #10b981;
+      --accent-success-glow: rgba(16, 185, 129, 0.2);
+      --accent-warning: #f59e0b;
+      --accent-danger: #ef4444;
+      --accent-danger-glow: rgba(239, 68, 68, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    body {
+      background: var(--bg-color);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.03) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(5, 7, 12, 0.8);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.35rem;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.25);
+    }
+
+    .logo-text h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .logo-text p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid var(--glass-border);
+      padding: 0.55rem 1.2rem;
+      border-radius: 2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .status-dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background-color: var(--accent-danger);
+      box-shadow: 0 0 10px var(--accent-danger);
+    }
+
+    .status-dot.connected {
+      background-color: var(--accent-success);
+      box-shadow: 0 0 12px var(--accent-success);
+      animation: pulse 2.5s infinite;
+    }
+
+    .status-dot.scanning {
+      background-color: var(--accent-warning);
+      box-shadow: 0 0 12px var(--accent-warning);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+
+    main {
+      flex: 1;
+      padding: 2.5rem;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 2.5rem;
+      z-index: 1;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      main {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+        gap: 1.5rem;
+      }
+      .column {
+        gap: 1.5rem;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      padding-bottom: 0.85rem;
+    }
+
+    .card-title svg {
+      color: var(--accent-primary);
+    }
+
+    /* Left Side: Connection & QR */
+    .connection-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 320px;
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    .qr-container {
+      background: white;
+      padding: 1.25rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+      margin: 1rem 0;
+      display: none;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .qr-container::after {
+      content: '';
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      height: 2px;
+      background: rgba(99, 102, 241, 0.5);
+      animation: qr-scan 2.5s infinite ease-in-out;
+      box-shadow: 0 0 8px var(--accent-primary);
+    }
+
+    @keyframes qr-scan {
+      0% { top: 12px; }
+      50% { top: calc(100% - 14px); }
+      100% { top: 12px; }
+    }
+
+    .qr-container img {
+      display: block;
+      width: 200px;
+      height: 200px;
+    }
+
+    .connection-loading {
+      border: 3px solid rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      border-top: 3px solid var(--accent-primary);
+      width: 48px;
+      height: 48px;
+      animation: spin 1.2s linear infinite;
+      margin: 2rem 0;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .success-linked {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      color: var(--accent-success);
+    }
+
+    .success-icon {
+      font-size: 4.5rem;
+      animation: bounce 2s infinite ease-in-out;
+      filter: drop-shadow(0 0 15px var(--accent-success-glow));
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* Right Side: Stats & Metrics */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    .stat-box {
+      background: rgba(5, 7, 12, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      transition: all 0.2s ease;
+    }
+
+    .stat-box:hover {
+      background: rgba(5, 7, 12, 0.9);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .stat-unit {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    /* Forms & Settings Inputs */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+
+    .input-field {
+      background: rgba(5, 7, 12, 0.6);
+      border: 1px solid var(--glass-border);
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      color: white;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent-primary);
+      background: rgba(5, 7, 12, 0.85);
+      box-shadow: 0 0 15px var(--accent-primary-glow);
+    }
+
+    .eye-btn {
+      position: absolute;
+      right: 0.85rem;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+    }
+
+    .eye-btn:hover {
+      color: var(--text-main);
+    }
+
+    /* Custom Switch Toggle */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.05);
+      transition: .4s;
+      border: 1px solid var(--glass-border);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--text-muted);
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-success);
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
+      background-color: white;
+    }
+
+    .slider.round {
+      border-radius: 24px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    /* Actions Panel */
+    .actions-panel {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: var(--accent-primary);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.6rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px var(--accent-primary-glow);
+    }
+
+    .btn:hover {
+      background: #4f46e5;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: none;
+    }
+
+    .btn-danger {
+      background: var(--accent-danger);
+      box-shadow: 0 4px 15px var(--accent-danger-glow);
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.35);
+    }
+
+    /* Logs Terminal Console */
+    .terminal-container {
+      grid-column: 1 / -1;
+      background: rgba(5, 7, 12, 0.9);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .terminal-body {
+      background: #020408;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      height: 280px;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.825rem;
+      line-height: 1.6;
+      color: #38bdf8;
+      border: 1px solid rgba(255, 255, 255, 0.01);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.9);
+    }
+
+    .terminal-line {
+      margin-bottom: 0.35rem;
+      white-space: pre-wrap;
+      border-left: 2px solid transparent;
+      padding-left: 0.5rem;
+    }
+
+    .terminal-line.error {
+      color: var(--accent-danger);
+      border-left-color: var(--accent-danger);
+    }
+
+    .terminal-line.info {
+      color: #38bdf8;
+      border-left-color: var(--accent-primary);
+    }
+
+    .terminal-line.success {
+      color: var(--accent-success);
+      border-left-color: var(--accent-success);
+    }
+
+    /* Auth Overlay */
+    .auth-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(5, 7, 12, 0.98);
+      backdrop-filter: blur(24px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 1.5rem;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.7);
+    }
+
+    .auth-card input {
+      background: rgba(5, 7, 12, 0.6);
+      border: 1px solid var(--glass-border);
+      padding: 0.85rem 1rem;
+      border-radius: 0.75rem;
+      color: white;
+      font-size: 1.05rem;
+      outline: none;
+      text-align: center;
+      transition: all 0.25s;
+    }
+
+    .auth-card input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 15px var(--accent-primary-glow);
+    }
+
+    footer {
+      padding: 1.75rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid rgba(255,255,255,0.03);
+      margin-top: auto;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Auth Dialog -->
+  <div id="auth-overlay" class="auth-overlay">
+    <div class="auth-card">
+      <div class="logo-badge" style="margin: 0 auto;">UT</div>
+      <h2>Akses Dashboard UT Bot</h2>
+      <p style="color: var(--text-muted); font-size: 0.875rem;">Masukkan password dashboard untuk melakukan pemantauan.</p>
+      <input type="password" id="auth-password" placeholder="Password Dashboard" />
+      <button class="btn" onclick="authenticate()">Masuk</button>
+      <p id="auth-error" style="color: var(--accent-danger); font-size: 0.85rem; display: none;">Password salah!</p>
+    </div>
+  </div>
+
+  <header>
+    <div class="logo-container">
+      <div class="logo-badge">UT</div>
+      <div class="logo-text">
+        <h1>Bot WhatsApp Akademik</h1>
+        <p>Universitas Terbuka Knowledge Engine</p>
+      </div>
+    </div>
+    <div class="status-pill">
+      <div id="header-status-dot" class="status-dot"></div>
+      <span id="header-status-text">Memuat status...</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- Left Column: Connection & Metrics -->
+    <div class="column">
+      <!-- Connection Card -->
+      <div class="card">
+        <div class="card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Koneksi WhatsApp Bot
+        </div>
+        <div class="connection-section">
+          <div id="conn-loading" class="connection-loading"></div>
+          
+          <div id="qr-wrap" class="qr-container">
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.85rem; font-weight: 500;">Scan QR code di bawah menggunakan aplikasi WhatsApp Anda:</p>
+            <img id="qr-img" src="" alt="WhatsApp QR Code">
+          </div>
+
+          <div id="linked-wrap" class="success-linked">
+            <span class="success-icon">✓</span>
+            <h3>Bot Terkoneksi dengan Sukses!</h3>
+            <p style="color: var(--text-muted); font-size: 0.875rem;">Sistem siap menjawab pertanyaan mahasiswa 24 jam.</p>
+          </div>
+
+          <p id="conn-helper-text" style="color: var(--text-muted); margin-top: 1rem; font-size: 0.85rem; font-weight: 500;"></p>
+        </div>
+      </div>
+
+      <!-- Server & DB Metrics -->
+      <div class="card">
+        <div class="card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+          Metrik Server VPS & Database
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span class="stat-label">Penggunaan RAM</span>
+            <span class="stat-value" id="stat-ram">0 <span class="stat-unit">MB</span></span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Uptime Sistem</span>
+            <span class="stat-value" id="stat-uptime">0s</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Artikel Pengetahuan</span>
+            <span class="stat-value" id="stat-kb">0 <span class="stat-unit">artikel</span></span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Database FAQ</span>
+            <span class="stat-value" id="stat-faq">0 <span class="stat-unit">items</span></span>
+          </div>
+        </div>
+
+        <div class="card-title" style="margin-top: 0.5rem; font-size: 1.05rem;">Aksi Cepat</div>
+        <div class="actions-panel">
+          <button class="btn" id="btn-crawl" onclick="triggerCrawl()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            Jalankan Crawler Sekarang
+          </button>
+          <button class="btn btn-secondary" onclick="fetchStatus()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            Segarkan Metrik
+          </button>
+          <button class="btn btn-danger" id="btn-restart" onclick="triggerRestart()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+            Restart Bot
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Settings -->
+    <div class="column">
+      <div class="card" style="height: 100%;">
+        <div class="card-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Pengaturan Konfigurasi Bot
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+          
+          <div class="form-group">
+            <label>Nomor Owner WhatsApp</label>
+            <input type="text" id="cfg-owner" class="input-field" placeholder="Contoh: 62895360042021">
+          </div>
+          
+          <div class="form-group">
+            <label>AI API Key (Google Gemini / OpenAI / Groq)</label>
+            <div style="position: relative; display: flex; align-items: center;">
+              <input type="password" id="cfg-openai" class="input-field" style="width: 100%; padding-right: 3rem;" placeholder="sk-... / AQ.... (Gemini) / gsk_...">
+              <button type="button" class="eye-btn" onclick="togglePasswordVisibility('cfg-openai')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Cooldown Perintah (ms)</label>
+            <input type="number" id="cfg-cooldown" class="input-field" placeholder="3000">
+          </div>
+
+          <!-- Anti-Link Filter Toggle -->
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 1rem; background: rgba(5, 7, 12, 0.4); border: 1px solid var(--glass-border); border-radius: 0.85rem; margin: 0.25rem 0;">
+            <div style="display: flex; flex-direction: column; gap: 0.15rem; padding-right: 1rem;">
+              <span style="font-size: 0.9rem; color: var(--text-main); font-weight: 600;">Anti-Link Filter</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Hapus otomatis link eksternal yang dikirim oleh member grup</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfg-antilink">
+              <span class="slider round"></span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>Password Baru Web Dashboard</label>
+            <div style="position: relative; display: flex; align-items: center;">
+              <input type="password" id="cfg-password" class="input-field" style="width: 100%; padding-right: 3rem;" placeholder="Kosongkan jika tidak ingin mengubah password">
+              <button type="button" class="eye-btn" onclick="togglePasswordVisibility('cfg-password')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button class="btn" style="width: 100%; justify-content: center; margin-top: 1rem;" onclick="saveSettings()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Simpan Konfigurasi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logs Terminal Console -->
+    <div class="terminal-container">
+      <div class="terminal-header">
+        <span>SISTEM LOGS (Terminal Output)</span>
+        <span id="log-status" style="color: var(--accent-success);">● Pembaruan otomatis aktif</span>
+      </div>
+      <div class="terminal-body" id="terminal">
+        <div class="terminal-line">[SYSTEM] Menghubungkan ke layanan logs...</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2026 Universitas Terbuka Academic RAG Assistant. Built for Ubuntu VPS Deployment.
+  </footer>
+
+  <script>
+    let authToken = '';
+
+    // Initialize check
+    window.onload = () => {
+      const savedPass = localStorage.getItem('ut_dashboard_pass');
+      if (savedPass) {
+        authToken = savedPass;
+        document.getElementById('auth-overlay').style.display = 'none';
+        document.getElementById('auth-password').value = savedPass;
+        startPolling();
+      }
+    };
+
+    function authenticate() {
+      const pass = document.getElementById('auth-password').value;
+      if (!pass) return;
+      
+      authToken = pass;
+      localStorage.setItem('ut_dashboard_pass', pass);
+      document.getElementById('auth-overlay').style.display = 'none';
+      startPolling();
+    }
+
+    function startPolling() {
+      fetchStatus();
+      fetchLogs();
+      loadSettingsUI();
+      setInterval(fetchStatus, 4000);
+      setInterval(fetchLogs, 5000);
+    }
+
+    function togglePasswordVisibility(id) {
+      const input = document.getElementById(id);
+      if (input.type === 'password') {
+        input.type = 'text';
+      } else {
+        input.type = 'password';
+      }
+    }
+
+    async function fetchStatus() {
+      try {
+        const res = await fetch('/status', {
+          headers: { 'Authorization': authToken }
+        });
+
+        if (res.status === 401) {
+          localStorage.removeItem('ut_dashboard_pass');
+          document.getElementById('auth-overlay').style.display = 'flex';
+          document.getElementById('auth-error').style.display = 'block';
+          return;
+        }
+
+        const data = await res.json();
+        
+        // Update statuses
+        const statusText = document.getElementById('header-status-text');
+        const statusDot = document.getElementById('header-status-dot');
+        const connHelper = document.getElementById('conn-helper-text');
+        const qrWrap = document.getElementById('qr-wrap');
+        const qrImg = document.getElementById('qr-img');
+        const linkedWrap = document.getElementById('linked-wrap');
+        const connLoading = document.getElementById('conn-loading');
+
+        statusDot.className = 'status-dot';
+        if (data.connected) {
+          statusText.innerText = 'Connected';
+          statusDot.classList.add('connected');
+          qrWrap.style.display = 'none';
+          connLoading.style.display = 'none';
+          linkedWrap.style.display = 'flex';
+          connHelper.innerText = 'Terkoneksi sebagai: ' + (data.botUser || 'WhatsApp Client');
+        } else if (data.qr) {
+          statusText.innerText = 'Waiting QR Scan';
+          statusDot.classList.add('scanning');
+          connLoading.style.display = 'none';
+          linkedWrap.style.display = 'none';
+          qrWrap.style.display = 'block';
+          qrImg.src = data.qr;
+          connHelper.innerText = 'Buka WhatsApp -> Perangkat Tertaut -> Tautkan Perangkat.';
+        } else {
+          statusText.innerText = 'Initializing Bot';
+          statusDot.classList.add('scanning');
+          qrWrap.style.display = 'none';
+          linkedWrap.style.display = 'none';
+          connLoading.style.display = 'block';
+          connHelper.innerText = 'Menunggu inisialisasi whatsapp-web.js client...';
+        }
+
+        // Metrics
+        document.getElementById('stat-ram').innerHTML = `${data.memory.usage} <span class="stat-unit">MB</span>`;
+        document.getElementById('stat-uptime').innerText = data.uptime;
+        document.getElementById('stat-kb').innerHTML = `${data.dbStats.knowledge} <span class="stat-unit">artikel</span>`;
+        document.getElementById('stat-faq').innerHTML = `${data.dbStats.faq} <span class="stat-unit">faq</span>`;
+
+      } catch (err) {
+        console.error('Error fetching status:', err);
+      }
+    }
+
+    async function fetchLogs() {
+      try {
+        const res = await fetch('/logs', {
+          headers: { 'Authorization': authToken }
+        });
+        if (res.status === 200) {
+          const logs = await res.json();
+          const term = document.getElementById('terminal');
+          term.innerHTML = '';
+          logs.forEach(line => {
+            const div = document.createElement('div');
+            div.className = 'terminal-line';
+            if (line.includes('[ERROR]')) div.classList.add('error');
+            else if (line.includes('[INFO]')) div.classList.add('info');
+            else if (line.includes('[CRAWL]')) div.classList.add('success');
+            div.innerText = line;
+            term.appendChild(div);
+          });
+          term.scrollTop = term.scrollHeight;
+        }
+      } catch (err) {
+        console.error('Error fetching logs:', err);
+      }
+    }
+
+    async function triggerCrawl() {
+      const btn = document.getElementById('btn-crawl');
+      btn.disabled = true;
+      btn.innerText = 'Crawling in Progress...';
+      
+      try {
+        const res = await fetch('/crawler/run', {
+          method: 'POST',
+          headers: { 'Authorization': authToken }
+        });
+        const data = await res.json();
+        alert(`Crawler triggered successfully. Total items extracted: ${data.count}`);
+      } catch (err) {
+        alert('Crawler trigger failed: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Jalankan Crawler Sekarang';
+        fetchStatus();
+        fetchLogs();
+      }
+    }
+
+    async function triggerRestart() {
+      if (!confirm('Apakah Anda yakin ingin merestart Bot? Koneksi WhatsApp akan terputus sementara.')) return;
+      
+      const btn = document.getElementById('btn-restart');
+      btn.disabled = true;
+      btn.innerText = 'Restarting...';
+      
+      try {
+        const res = await fetch('/bot/restart', {
+          method: 'POST',
+          headers: { 'Authorization': authToken }
+        });
+        const data = await res.json();
+        alert(data.message || 'Bot sedang direstart. Halaman akan disegarkan otomatis dalam 5 detik.');
+        
+        // Disable UI status temporarily
+        const statusText = document.getElementById('header-status-text');
+        const statusDot = document.getElementById('header-status-dot');
+        statusText.innerText = 'Reconnecting...';
+        statusDot.className = 'status-dot scanning';
+        
+        setTimeout(() => {
+          window.location.reload();
+        }, 5000);
+      } catch (err) {
+        alert('Gagal merestart bot: ' + err.message);
+        btn.disabled = false;
+        btn.innerText = 'Restart Bot';
+      }
+    }
+
+    async function loadSettingsUI() {
+      try {
+        const res = await fetch('/settings', {
+          headers: { 'Authorization': authToken }
+        });
+        if (res.status === 200) {
+          const data = await res.json();
+          document.getElementById('cfg-owner').value = data.OWNER_NUMBER || '';
+          document.getElementById('cfg-openai').value = data.OPENAI_API_KEY || '';
+          document.getElementById('cfg-cooldown').value = data.COOLDOWN_MS || 3000;
+          document.getElementById('cfg-antilink').checked = data.ANTI_LINK_ENABLED !== false;
+        }
+      } catch (err) {
+        console.error('Failed to load settings in UI', err);
+      }
+    }
+
+    async function saveSettings() {
+      const owner = document.getElementById('cfg-owner').value.trim();
+      const openai = document.getElementById('cfg-openai').value.trim();
+      const cooldown = document.getElementById('cfg-cooldown').value.trim();
+      const antilink = document.getElementById('cfg-antilink').checked;
+      const newPass = document.getElementById('cfg-password').value.trim();
+
+      const body = {
+        OWNER_NUMBER: owner,
+        OPENAI_API_KEY: openai,
+        COOLDOWN_MS: cooldown,
+        ANTI_LINK_ENABLED: antilink
+      };
+
+      if (newPass) {
+        body.WEB_DASHBOARD_PASSWORD = newPass;
+      }
+
+      try {
+        const res = await fetch('/settings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': authToken
+          },
+          body: JSON.stringify(body)
+        });
+
+        if (res.status === 200) {
+          alert('Konfigurasi berhasil disimpan!');
+          if (newPass) {
+            authToken = newPass;
+            localStorage.setItem('ut_dashboard_pass', newPass);
+            document.getElementById('auth-password').value = newPass;
+          }
+          document.getElementById('cfg-password').value = '';
+          loadSettingsUI();
+        } else {
+          const errData = await res.json();
+          alert('Gagal menyimpan konfigurasi: ' + errData.error);
+        }
+      } catch (err) {
+        alert('Terjadi kesalahan saat menyimpan: ' + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
