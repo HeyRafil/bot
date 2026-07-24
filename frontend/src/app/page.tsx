@@ -113,6 +113,7 @@ export default function DashboardPage() {
   const [aiModel, setAiModel] = useState<string>('gemini-1.5-flash');
   const [aiTemperature, setAiTemperature] = useState<number>(0.3);
   const [aiMaxTokens, setAiMaxTokens] = useState<number>(800);
+  const [badWords, setBadWords] = useState<string>('');
   const [sysMsg, setSysMsg] = useState<string>('');
 
   // Global Admins and Blacklist management
@@ -326,6 +327,7 @@ export default function DashboardPage() {
       setAiModel(data.AI_MODEL || 'gemini-1.5-flash');
       setAiTemperature(data.AI_TEMPERATURE !== undefined ? parseFloat(data.AI_TEMPERATURE) : 0.3);
       setAiMaxTokens(data.AI_MAX_TOKENS !== undefined ? parseInt(data.AI_MAX_TOKENS) : 800);
+      setBadWords(data.BAD_WORDS || '');
     } catch (_) {}
   };
 
@@ -344,7 +346,8 @@ export default function DashboardPage() {
           AI_SYSTEM_PROMPT: aiSystemPrompt,
           AI_MODEL: aiModel,
           AI_TEMPERATURE: aiTemperature,
-          AI_MAX_TOKENS: aiMaxTokens
+          AI_MAX_TOKENS: aiMaxTokens,
+          BAD_WORDS: badWords
         })
       });
       setSysMsg('Pengaturan berhasil disimpan!');
@@ -1058,7 +1061,7 @@ export default function DashboardPage() {
             {/* GROUP SETTINGS DETAILS */}
             <div className="lg:col-span-2">
               {selectedGroup ? (
-                <div className="bg-gray-900/40 border border-gray-800 rounded-3xl p-8 flex flex-col gap-6">
+                <div key={selectedGroup.id} className="bg-gray-900/40 border border-gray-800 rounded-3xl p-8 flex flex-col gap-6">
                   <div className="flex justify-between items-start border-b border-gray-800 pb-4">
                     <div>
                       {isEditingGroupName ? (
@@ -1576,6 +1579,18 @@ export default function DashboardPage() {
                     className="w-full p-4 bg-gray-950/60 border border-gray-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
                     rows={6}
                   />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 mb-2">Daftar Kata Kasar/Sensitif (Bad Words)</label>
+                  <textarea
+                    value={badWords}
+                    onChange={(e) => setBadWords(e.target.value)}
+                    placeholder="Masukkan kata-kata kasar dipisahkan dengan koma (contoh: anjing, babi, bodoh)..."
+                    className="w-full p-4 bg-gray-950/60 border border-gray-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500"
+                    rows={3}
+                  />
+                  <span className="text-[10px] text-slate-500 mt-1 block">Pisahkan setiap kata dengan tanda koma tanpa spasi tambahan. Filter Anti-Toxic/Bad-Word akan memeriksa kata-kata ini secara otomatis.</span>
                 </div>
 
                 <button

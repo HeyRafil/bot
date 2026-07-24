@@ -709,9 +709,12 @@ async function safeEditMessage(client: any, message: any, newText: string): Prom
     const evaluatePromise = client.pupPage.evaluate(async (targetId: string, text: string) => {
       const report = { success: false, step: 'start', details: '', error: '' };
       try {
-        const store = (window as any).Store;
+        let store = (window as any).Store;
         if (!store) {
-          report.error = 'window.Store is undefined';
+          try { store = (window as any).require('WAWebCollections'); } catch (_) {}
+        }
+        if (!store) {
+          report.error = 'Both window.Store and WAWebCollections are undefined';
           return report;
         }
         

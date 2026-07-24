@@ -15,69 +15,80 @@ export const addGroupCommand: Command = {
     }
 
     const groupId = chat.id._serialized;
-    let groupName = chat.name;
+    let groupName = null;
 
-    // Deep-resolve real group name from all available sources
-    if (!groupName || groupName === 'Grup WA' || groupName === 'Grup') {
-      // 1. Check raw message data
+    // 1. Try standard getChatById first to fetch fresh name from client
+    if (client) {
+      try {
+        const realChat = await client.getChatById(groupId);
+        if (realChat && realChat.name && realChat.name !== 'Grup WA' && realChat.name !== 'Grup' && realChat.name !== 'Grup WhatsApp') {
+          groupName = realChat.name;
+        }
+      } catch (_) {}
+    }
+
+    // 2. Try raw message data
+    if (!groupName || groupName === 'Grup WA' || groupName === 'Grup' || groupName === 'Grup WhatsApp') {
       const rawMsg = msg as any;
       if (rawMsg._data?.chat?.name) {
-        groupName = rawMsg._data.chat.name;
-      }
-
-      // 2. Try client.getChatById
-      if ((!groupName || groupName === 'Grup WA' || groupName === 'Grup') && client) {
-        try {
-          const realChat = await client.getChatById(groupId);
-          if (realChat && realChat.name && realChat.name !== 'Grup WA' && realChat.name !== 'Grup') {
-            groupName = realChat.name;
-          }
-        } catch (_) {}
-      }
-
-      // 3. Deep search in Puppeteer Store with WidFactory & GroupMetadata
-      if ((!groupName || groupName === 'Grup WA' || groupName === 'Grup') && client && client.pupPage) {
-        try {
-          const fetchedName = await client.pupPage.evaluate(async (gid: string) => {
-            try {
-              const store = (globalThis as any).window?.Store || (window as any).Store;
-              if (!store) return null;
-
-              let wid = null;
-              if (store.WidFactory && typeof store.WidFactory.createWid === 'function') {
-                try { wid = store.WidFactory.createWid(gid); } catch (_) {}
-              }
-
-              // Chat Store
-              if (store.Chat) {
-                let c = store.Chat.get(gid) || (wid ? store.Chat.get(wid) : null);
-                if (!c && typeof store.Chat.find === 'function') {
-                  try { c = await store.Chat.find(wid || gid); } catch (_) {}
-                }
-                if (c) {
-                  const n = c.name || c.formattedTitle || (c.groupMetadata ? c.groupMetadata.subject : null);
-                  if (n && n !== 'Grup WA' && n !== 'Grup') return n;
-                }
-              }
-
-              // GroupMetadata Store
-              if (store.GroupMetadata) {
-                let gMeta = store.GroupMetadata.get(gid) || (wid ? store.GroupMetadata.get(wid) : null);
-                if (!gMeta && typeof store.GroupMetadata.find === 'function') {
-                  try { gMeta = await store.GroupMetadata.find(wid || gid); } catch (_) {}
-                }
-                if (gMeta && gMeta.subject) return gMeta.subject;
-              }
-            } catch (_) {}
-            return null;
-          }, groupId);
-
-          if (fetchedName) groupName = fetchedName;
-        } catch (_) {}
+        const n = rawMsg._data.chat.name;
+        if (n && n !== 'Grup WA' && n !== 'Grup' && n !== 'Grup WhatsApp') {
+          groupName = n;
+        }
       }
     }
 
-    if (!groupName || groupName === 'Grup WA' || groupName === 'Grup') {
+    // 3. Deep search in Puppeteer Store with WidFactory & GroupMetadata
+    if ((!groupName || groupName === 'Grup WA' || groupName === 'Grup' || groupName === 'Grup WhatsApp') && client && client.pupPage) {
+      try {
+        const fetchedName = await client.pupPage.evaluate(async (gid: string) => {
+          try {
+            const collections = (window as any).require('WAWebCollections');
+            const widFactory = (window as any).require('WAWebWidFactory');
+            if (!collections) return null;
+
+            let wid = null;
+            if (widFactory && typeof widFactory.createWid === 'function') {
+              try { wid = widFactory.createWid(gid); } catch (_) {}
+            }
+
+            // Chat Store
+            if (collections.Chat) {
+              let c = collections.Chat.get(gid) || (wid ? collections.Chat.get(wid) : null);
+              if (!c && typeof collections.Chat.find === 'function') {
+                try { c = await collections.Chat.find(wid || gid); } catch (_) {}
+              }
+              if (c) {
+                const n = c.name || c.formattedTitle || (c.groupMetadata ? c.groupMetadata.subject : null);
+                if (n && n !== 'Grup WA' && n !== 'Grup' && n !== 'Grup WhatsApp') return n;
+              }
+            }
+
+            // GroupMetadata Store
+            if (collections.GroupMetadata) {
+              let gMeta = collections.GroupMetadata.get(gid) || (wid ? collections.GroupMetadata.get(wid) : null);
+              if (!gMeta && typeof collections.GroupMetadata.find === 'function') {
+                try { gMeta = await collections.GroupMetadata.find(wid || gid); } catch (_) {}
+              }
+              if (gMeta && gMeta.subject) return gMeta.subject;
+            }
+          } catch (_) {}
+          return null;
+        }, groupId);
+
+        if (fetchedName) groupName = fetchedName;
+      } catch (_) {}
+    }
+
+    // 4. Try the cached chat.name as fallback
+    if (!groupName || groupName === 'Grup WA' || groupName === 'Grup' || groupName === 'Grup WhatsApp') {
+      if (chat.name && chat.name !== 'Grup WA' && chat.name !== 'Grup' && chat.name !== 'Grup WhatsApp') {
+        groupName = chat.name;
+      }
+    }
+
+    // 5. Ultimate fallback
+    if (!groupName || groupName === 'Grup WA' || groupName === 'Grup' || groupName === 'Grup WhatsApp') {
       groupName = 'Grup WhatsApp';
     }
     

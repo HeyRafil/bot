@@ -13,6 +13,7 @@ export interface SettingsSchema {
   WEB_DASHBOARD_PASSWORD: string;
   ANTI_LINK_ENABLED: boolean;
   PREFIX?: string;
+  BAD_WORDS?: string;
   [key: string]: any;
 }
 
@@ -24,7 +25,8 @@ const DEFAULT_SETTINGS: SettingsSchema = {
   COOLDOWN_MS: parseInt(process.env.COOLDOWN_MS || '3000', 10),
   WEB_DASHBOARD_PASSWORD: process.env.WEB_DASHBOARD_PASSWORD || 'AdminUT2026',
   ANTI_LINK_ENABLED: true,
-  PREFIX: '.' // Default prefix as requested
+  PREFIX: '.', // Default prefix as requested
+  BAD_WORDS: 'anjing,bangsat,babi,kontol,memek,jembut,goblok,tolol,pantek,asu'
 };
 
 let settingsCache: SettingsSchema | null = null;

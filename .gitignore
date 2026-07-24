@@ -17,10 +17,9 @@ out/
 .env.production.local
 
 # Databases and Local Storage
-storage/db/suggestions.json
-storage/db/groups.json
-storage/db/settings.json
+storage/db/*.json
 session/
+.wwebjs_cache/
 *.db
 *.db-journal
 *.sqlite

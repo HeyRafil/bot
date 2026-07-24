@@ -12,8 +12,162 @@ import { handleMessage } from '../handlers/messageHandler.js';
 import prisma from '../database/prisma.js';
 import pluginManager from '../utils/pluginManager.js';
 import { activePollMenus } from '../utils/pollStore.js';
+import { getSerializedId } from '../utils/chatHelper.js';
+
+const activeWelcomeSessions = new Map<string, { cancel: boolean }>();
 
 declare let window: any;
+
+/**
+ * Safely edits a sent message by resolving it and running Puppeteer evaluations
+ */
+async function safeEditMessage(client: any, message: any, newText: string, mentions: string[] = []): Promise<boolean> {
+  const msgId = message?.id?._serialized || message?.id?.$1 || getSerializedId(message?.id);
+  if (!msgId) {
+    logger.warn(`[whatsappClient.ts] safeEditMessage: invalid message object passed.`);
+    return false;
+  }
+  try {
+    if (!client.pupPage) {
+      logger.warn(`[whatsappClient.ts] safeEditMessage failed: client.pupPage is undefined`);
+      return false;
+    }
+    
+    const evaluatePromise = client.pupPage.evaluate(async (targetId: string, text: string, mentionJids: string[]) => {
+      const report = { success: false, step: 'start', details: '', error: '' };
+      try {
+        let store = (window as any).Store;
+        if (!store) {
+          try { store = (window as any).require('WAWebCollections'); } catch (_) {}
+        }
+        if (!store) {
+          report.error = 'Both window.Store and WAWebCollections are undefined';
+          return report;
+        }
+        
+        let msg = null;
+        if (store.Msg) {
+          msg = store.Msg.get(targetId);
+          if (msg) report.details += 'Found in Store.Msg. ';
+        }
+        
+        if (!msg) {
+          try {
+            const collections = (window as any).require('WAWebCollections');
+            if (collections && collections.Msg) {
+              msg = collections.Msg.get(targetId);
+              if (msg) report.details += 'Found in WAWebCollections.Msg. ';
+            }
+          } catch (e: any) {
+            report.details += `WAWebCollections failed: ${e.message}. `;
+          }
+        }
+        
+        if (!msg) {
+          report.details += 'Msg not found, starting retry loop. ';
+          for (let i = 0; i < 10; i++) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            if (store.Msg) {
+              msg = store.Msg.get(targetId);
+            }
+            if (!msg) {
+              try {
+                const collections = (window as any).require('WAWebCollections');
+                if (collections && collections.Msg) {
+                  msg = collections.Msg.get(targetId);
+                }
+              } catch (_) {}
+            }
+            if (msg) {
+              report.details += `Found in retry loop at step ${i}. `;
+              break;
+            }
+          }
+        }
+        
+        if (!msg) {
+          try {
+            const collections = (window as any).require('WAWebCollections');
+            if (collections && collections.Msg) {
+              const res = await collections.Msg.getMessagesById([targetId]);
+              msg = res && res.messages ? res.messages[0] : null;
+              if (msg) report.details += 'Found via getMessagesById. ';
+            }
+          } catch (e: any) {
+            report.details += `getMessagesById failed: ${e.message}. `;
+          }
+        }
+        
+        if (!msg) {
+          report.error = 'Msg not found';
+          report.step = 'not_found';
+          return report;
+        }
+        
+        report.step = 'found';
+        
+        if (typeof msg.edit === 'function') {
+          await msg.edit(text);
+          report.success = true;
+          report.details += 'Edited via msg.edit().';
+          return report;
+        }
+        
+        if (store.EditMessage) {
+          try {
+            if (typeof store.EditMessage.sendMessageEdit === 'function') {
+              await store.EditMessage.sendMessageEdit(msg, text);
+              report.success = true;
+              report.details += 'Edited via Store.EditMessage.sendMessageEdit.';
+              return report;
+            } else if (typeof store.EditMessage.editMessage === 'function') {
+              await store.EditMessage.editMessage(msg, text);
+              report.success = true;
+              report.details += 'Edited via Store.EditMessage.editMessage.';
+              return report;
+            }
+          } catch (e: any) {
+            report.details += `Store.EditMessage failed: ${e.message}. `;
+          }
+        }
+        
+        for (const key in store) {
+          if (store[key]) {
+            try {
+              if (typeof store[key].sendMessageEdit === 'function') {
+                await store[key].sendMessageEdit(msg, text);
+                report.success = true;
+                report.details += `Edited via store[${key}].sendMessageEdit.`;
+                return report;
+              } else if (typeof store[key].editMessage === 'function') {
+                await store[key].editMessage(msg, text);
+                report.success = true;
+                report.details += `Edited via store[${key}].editMessage.`;
+                return report;
+              }
+            } catch (_) {}
+          }
+        }
+        
+        report.error = 'No edit message function succeeded';
+      } catch (e: any) {
+        report.error = `Outer evaluate error: ${e.message}`;
+      }
+      return report;
+    }, msgId, newText, mentions);
+    
+    const timeoutPromise = new Promise<any>((_, reject) => 
+      setTimeout(() => reject(new Error('Puppeteer evaluation timeout')), 5000)
+    );
+    
+    const diag: any = await Promise.race([evaluatePromise, timeoutPromise]);
+    logger.info(`[whatsappClient.ts] safeEditMessage result for ${msgId}: success = ${diag.success}, step = ${diag.step}, error = ${diag.error}`);
+    return diag.success;
+  } catch (err: any) {
+    logger.error(`[whatsappClient.ts] safeEditMessage outer catch failed for ${msgId}: ${err.message}`);
+  }
+  return false;
+}
 
 dotenv.config();
 
@@ -497,71 +651,116 @@ export function initWhatsAppClient() {
 
       // Default welcome text if enabled
       if (!groupSettings || groupSettings.welcomeEnabled) {
-        let welcomeMessage = groupSettings?.welcomeMessage;
-        
-        // Use the new clean Indonesian welcome message if unset or matches legacy defaults
-        if (
-          !welcomeMessage ||
-          welcomeMessage === "Welcome @user to *[Group]*!" ||
-          welcomeMessage === "Welcome @user to *[Group]*! 👋📚" ||
-          welcomeMessage === "Selamat datang (user) di Group (group)\nSelamat berdiskusi"
-        ) {
-          welcomeMessage = "Selamat datang (user) di *(group)*\nSelamat berdiskusi";
-        }
-
         const recipientIds = notification.recipientIds || [];
-        const mentions: string[] = [];
-        const welcomeNames: string[] = [];
-
-        for (const id of recipientIds) {
-          const rawNumber = id.split('@')[0];
-          try {
-            const contact = await client.getContactById(id);
-            welcomeNames.push(contact.pushname ? `${contact.pushname} (@${rawNumber})` : `@${rawNumber}`);
-            mentions.push(id);
-          } catch (_) {
-            welcomeNames.push(`@${rawNumber}`);
-            mentions.push(id);
-          }
-        }
-
-        const nameStr = welcomeNames.join(', ');
-
+        
         // Retrieve real group title from DB if current chat.name is fallback
         let groupTitle = chat.name;
-        if (!groupTitle || groupTitle === 'Grup' || groupTitle === 'Grup WA') {
+        if (!groupTitle || groupTitle === 'Grup' || groupTitle === 'Grup WA' || groupTitle === 'Grup WhatsApp') {
           const dbGroup = await prisma.group.findUnique({ where: { id: groupId } });
-          if (dbGroup && dbGroup.name && dbGroup.name !== 'Grup' && dbGroup.name !== 'Grup WA') {
+          if (dbGroup && dbGroup.name && dbGroup.name !== 'Grup' && dbGroup.name !== 'Grup WA' && dbGroup.name !== 'Grup WhatsApp') {
             groupTitle = dbGroup.name;
           }
         }
-        if (!groupTitle || groupTitle === 'Grup' || groupTitle === 'Grup WA') {
+        if (!groupTitle || groupTitle === 'Grup' || groupTitle === 'Grup WA' || groupTitle === 'Grup WhatsApp') {
           groupTitle = 'Grup WhatsApp';
         }
 
-        let formattedMsg = welcomeMessage
-          .replace(/di Group \(group\)/gi, 'di *(group)*')
-          .replace(/di Group \[Group\]/gi, 'di *(group)*')
-          .replace(/@user|\(user\)/g, nameStr)
-          .replace(/\[Group\]|\(group\)/gi, groupTitle);
-
-        await chat.sendMessage(formattedMsg, { mentions });
-        logToDashboard('Broadcast', `Sent Welcome message in group ${groupTitle}`);
-
-        // Send welcome sticker if exists and enabled in settings
+        // Send welcome sticker if enabled
         if (!groupSettings || groupSettings.welcomeStickerEnabled !== false) {
           const stickerPath = path.resolve('a3e14a32-0541-4e07-aa19-f353be81f5e9.webp');
           if (fs.existsSync(stickerPath)) {
             try {
               const media = MessageMedia.fromFilePath(stickerPath);
               await chat.sendMessage(media, { sendMediaAsSticker: true });
-              logger.info(`Sent welcome sticker in group: ${chat.name}`);
+              logger.info(`Sent welcome sticker in group: ${groupTitle}`);
             } catch (stickerErr) {
               logger.error("Failed to send welcome sticker", stickerErr);
             }
           } else {
             logger.warn(`Welcome sticker file not found at path: ${stickerPath}`);
           }
+        }
+
+        for (const id of recipientIds) {
+          // Launch an independent welcome animation edit loop for each joining member
+          (async () => {
+            const sessionKey = `${groupId}:${id}`;
+            
+            // Clean up any existing welcome edit session for this member JID first to prevent duplicates
+            const oldSession = activeWelcomeSessions.get(sessionKey);
+            if (oldSession) {
+              oldSession.cancel = true;
+            }
+
+            const currentSession = { cancel: false };
+            activeWelcomeSessions.set(sessionKey, currentSession);
+
+            const rawNumber = id.split('@')[0];
+            let memberName = 'Mahasiswa';
+            try {
+              const contact = await client.getContactById(id);
+              memberName = contact.pushname || 'Mahasiswa';
+            } catch (_) {}
+
+            const userMention = `${memberName} (@${rawNumber})`;
+            const mentions = [id];
+
+            // Define the message templates
+            const pesan1 = `Selamat datang ${userMention} di *${groupTitle}*\nSelamat berdiskusi`;
+            
+            const pesan2 = `📚 Grup *${groupTitle}* dibuat sebagai media untuk:\n\n` +
+              `• Berbagi informasi akademik\n` +
+              `• Pengumuman penting\n` +
+              `• Diskusi perkuliahan\n` +
+              `• Berbagi pengalaman dan saling membantu sesama mahasiswa.`;
+
+            const pesan3 = `📖 *RULES ${groupTitle}*\n\n` +
+              `✅ Gunakan bahasa yang sopan.\n` +
+              `✅ Hormati seluruh anggota grup.\n` +
+              `✅ Dilarang spam, promosi, maupun flood.\n` +
+              `✅ Fokus pada pembahasan yang berkaitan dengan Universitas Terbuka.`;
+
+            const pesan4 = `🎉 Terima kasih telah bergabung di *${groupTitle}*.\n\n` +
+              `Semoga grup ini menjadi tempat yang nyaman untuk belajar, berdiskusi, dan saling membantu.\n\n` +
+              `Selamat belajar dan semoga sukses! 🎓`;
+
+            // Sequence: pesan1 -> pesan2 -> pesan3 -> pesan4 -> back to pesan1 (and stay there)
+            const messages = [pesan1, pesan2, pesan3, pesan4, pesan1];
+
+            try {
+              // Send the initial Message 1
+              const sentMsg = await chat.sendMessage(pesan1, { mentions });
+              logToDashboard('Broadcast', `Sent initial Welcome message for ${memberName} in group ${groupTitle}`);
+
+              let currentStep = 0;
+
+              for (let i = 1; i < messages.length; i++) {
+                // Wait for 3 seconds
+                await new Promise(resolve => setTimeout(resolve, 3000));
+
+                // Check if session has been cancelled or cleaned up
+                const check = activeWelcomeSessions.get(sessionKey);
+                if (!check || check.cancel) {
+                  logger.info(`[WelcomeLoop] Session ${sessionKey} has been cancelled. Stopping loop.`);
+                  break;
+                }
+
+                currentStep = i;
+                const nextMsgText = messages[currentStep];
+
+                // Pass the mentions array so that when it goes back to Pesan 1, the tag is correctly green & clickable!
+                const isEdited = await safeEditMessage(client, sentMsg, nextMsgText, mentions);
+                if (!isEdited) {
+                  logger.error(`[WelcomeLoop] Failed to edit message for ${sessionKey} using safeEditMessage. Stopping loop.`);
+                  break;
+                }
+              }
+              activeWelcomeSessions.delete(sessionKey);
+            } catch (err: any) {
+              logger.error(`[WelcomeLoop] Error in welcome session for ${sessionKey}: ${err.message}`, err);
+              activeWelcomeSessions.delete(sessionKey);
+            }
+          })();
         }
       }
     } catch (err) {

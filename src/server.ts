@@ -599,6 +599,7 @@ app.get('/game/ttt/:roomId', (req, res) => {
 </html>`);
 });
 
+
 /**
  * Endpoint: GET /status (Secure)
  */
@@ -645,7 +646,23 @@ app.get('/logs', async (req, res) => {
     if (!existsSync(logFilePath)) {
       return res.json([]);
     }
-    const logData = await fs.readFile(logFilePath, 'utf8');
+    
+    // Memory-efficient: read at most the last 100KB of the log file
+    const stat = await fs.stat(logFilePath);
+    const size = stat.size;
+    const maxReadBytes = 100 * 1024;
+    const start = Math.max(0, size - maxReadBytes);
+    const length = size - start;
+
+    let logData = '';
+    if (length > 0) {
+      const buffer = Buffer.alloc(length);
+      const fd = await fs.open(logFilePath, 'r');
+      await fd.read(buffer, 0, length, start);
+      await fd.close();
+      logData = buffer.toString('utf8');
+    }
+
     const lines = logData.split('\n').filter(Boolean);
     const lastLines = lines.slice(-100); 
     res.json(lastLines);
@@ -710,7 +727,7 @@ async function fetchRealGroupName(gid: string): Promise<string | null> {
   // 1. Try standard whatsapp-web.js getChatById
   try {
     const chat = await client.getChatById(gid);
-    if (chat && chat.name && chat.name !== 'Grup WA' && chat.name !== 'Grup') {
+    if (chat && chat.name && chat.name !== 'Grup WA' && chat.name !== 'Grup' && chat.name !== 'Grup WhatsApp') {
       return chat.name;
     }
   } catch (_) {}
@@ -720,41 +737,42 @@ async function fetchRealGroupName(gid: string): Promise<string | null> {
     try {
       const waName = await client.pupPage.evaluate(async (targetJid: string) => {
         try {
-          const store = (window as any).Store;
-          if (!store) return null;
+          const collections = (window as any).require('WAWebCollections');
+          const widFactory = (window as any).require('WAWebWidFactory');
+          if (!collections) return null;
 
           let wid = null;
-          if (store.WidFactory && typeof store.WidFactory.createWid === 'function') {
+          if (widFactory && typeof widFactory.createWid === 'function') {
             try {
-              wid = store.WidFactory.createWid(targetJid);
+              wid = widFactory.createWid(targetJid);
             } catch (_) {}
           }
 
           // Search Chat store
-          if (store.Chat) {
-            let c = store.Chat.get(targetJid) || (wid ? store.Chat.get(wid) : null);
-            if (!c && typeof store.Chat.find === 'function') {
+          if (collections.Chat) {
+            let c = collections.Chat.get(targetJid) || (wid ? collections.Chat.get(wid) : null);
+            if (!c && typeof collections.Chat.find === 'function') {
               try {
-                c = await store.Chat.find(wid || targetJid);
+                c = await collections.Chat.find(wid || targetJid);
               } catch (_) {}
             }
-            if (!c && typeof store.Chat.find === 'function') {
+            if (!c && typeof collections.Chat.find === 'function') {
               try {
-                c = await store.Chat.find({ id: wid || targetJid });
+                c = await collections.Chat.find({ id: wid || targetJid });
               } catch (_) {}
             }
             if (c) {
               const name = c.name || c.formattedTitle || (c.groupMetadata ? c.groupMetadata.subject : null);
-              if (name && name !== 'Grup WA' && name !== 'Grup') return name;
+              if (name && name !== 'Grup WA' && name !== 'Grup' && name !== 'Grup WhatsApp') return name;
             }
           }
 
           // Search GroupMetadata store directly
-          if (store.GroupMetadata) {
-            let gMeta = store.GroupMetadata.get(targetJid) || (wid ? store.GroupMetadata.get(wid) : null);
-            if (!gMeta && typeof store.GroupMetadata.find === 'function') {
+          if (collections.GroupMetadata) {
+            let gMeta = collections.GroupMetadata.get(targetJid) || (wid ? collections.GroupMetadata.get(wid) : null);
+            if (!gMeta && typeof collections.GroupMetadata.find === 'function') {
               try {
-                gMeta = await store.GroupMetadata.find(wid || targetJid);
+                gMeta = await collections.GroupMetadata.find(wid || targetJid);
               } catch (_) {}
             }
             if (gMeta && gMeta.subject) return gMeta.subject;
@@ -763,7 +781,7 @@ async function fetchRealGroupName(gid: string): Promise<string | null> {
         return null;
       }, gid);
 
-      if (waName && waName !== 'Grup WA' && waName !== 'Grup') {
+      if (waName && waName !== 'Grup WA' && waName !== 'Grup' && waName !== 'Grup WhatsApp') {
         return waName;
       }
     } catch (_) {}
@@ -784,7 +802,7 @@ app.get('/api/groups', authMiddleware, async (req, res) => {
     if (botState.connected) {
       // Auto-resolve real group names for any groups holding generic fallback names
       for (const g of groups) {
-        if (g.name === 'Grup WA' || g.name === 'Grup' || !g.name) {
+        if (g.name === 'Grup WA' || g.name === 'Grup' || g.name === 'Grup WhatsApp' || !g.name) {
           try {
             const realName = await fetchRealGroupName(g.id);
             if (realName) {
@@ -872,7 +890,7 @@ app.post('/api/groups', authMiddleware, async (req, res) => {
   let resolvedName = name ? name.trim() : '';
 
   // Try auto-fetching real group name from WhatsApp if empty or generic default
-  if (!resolvedName || resolvedName === 'Grup WA' || resolvedName === 'Grup') {
+  if (!resolvedName || resolvedName === 'Grup WA' || resolvedName === 'Grup' || resolvedName === 'Grup WhatsApp') {
     try {
       const waName = await fetchRealGroupName(formattedId);
       if (waName) {
@@ -882,7 +900,7 @@ app.post('/api/groups', authMiddleware, async (req, res) => {
   }
 
   if (!resolvedName) {
-    resolvedName = 'Grup WA';
+    resolvedName = 'Grup WhatsApp';
   }
 
   try {

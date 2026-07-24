@@ -119,8 +119,8 @@ export async function getSafeChat(msg: Message, client: any, context: string = '
         try {
           if (client.pupPage) {
             await client.pupPage.evaluate(async (chatId: string) => {
-              const store = (window as any).Store;
-              const chat = store && store.Chat ? store.Chat.get(chatId) : null;
+              const collections = (window as any).require('WAWebCollections');
+              const chat = collections && collections.Chat ? collections.Chat.get(chatId) : null;
               if (chat) await chat.sendStateTyping();
             }, msg.from);
           }
@@ -130,8 +130,8 @@ export async function getSafeChat(msg: Message, client: any, context: string = '
         try {
           if (client.pupPage) {
             await client.pupPage.evaluate(async (chatId: string) => {
-              const store = (window as any).Store;
-              const chat = store && store.Chat ? store.Chat.get(chatId) : null;
+              const collections = (window as any).require('WAWebCollections');
+              const chat = collections && collections.Chat ? collections.Chat.get(chatId) : null;
               if (chat) await chat.clearState();
             }, msg.from);
           }
@@ -141,8 +141,8 @@ export async function getSafeChat(msg: Message, client: any, context: string = '
         try {
           if (client.pupPage) {
             await client.pupPage.evaluate(async (chatId: string, participants: string[]) => {
-              const store = (window as any).Store;
-              const chat = store && store.Chat ? store.Chat.get(chatId) : null;
+              const collections = (window as any).require('WAWebCollections');
+              const chat = collections && collections.Chat ? collections.Chat.get(chatId) : null;
               if (chat && chat.groupMetadata) {
                 await chat.groupMetadata.removeParticipants(participants);
               }
@@ -159,8 +159,8 @@ export async function getSafeChat(msg: Message, client: any, context: string = '
     if (isGroup && client.pupPage) {
       try {
         const groupData = await client.pupPage.evaluate(async (chatId: string) => {
-          const store = (window as any).Store;
-          const chat = store && store.Chat ? store.Chat.get(chatId) : null;
+          const collections = (window as any).require('WAWebCollections');
+          const chat = collections && collections.Chat ? collections.Chat.get(chatId) : null;
           if (chat && chat.groupMetadata) {
             return {
               name: chat.name || chat.formattedTitle,

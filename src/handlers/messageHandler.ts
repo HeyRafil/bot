@@ -85,16 +85,16 @@ export async function handleMessage(client: any, msg: Message) {
       const existingGroup = await prisma.group.findUnique({ where: { id: chat.id._serialized } });
       let groupName = chat.name;
 
-      if (!groupName || groupName === 'Grup WA' || groupName === 'Grup') {
-        if (existingGroup && existingGroup.name && existingGroup.name !== 'Grup WA' && existingGroup.name !== 'Grup') {
+      if (!groupName || groupName === 'Grup WA' || groupName === 'Grup' || groupName === 'Grup WhatsApp') {
+        if (existingGroup && existingGroup.name && existingGroup.name !== 'Grup WA' && existingGroup.name !== 'Grup' && existingGroup.name !== 'Grup WhatsApp') {
           groupName = existingGroup.name;
         } else if (client && client.pupPage) {
           try {
             const realName = await client.pupPage.evaluate(async (gid: string) => {
               try {
-                const store = (window as any).Store;
-                if (store && store.Chat) {
-                  const c = store.Chat.get(gid);
+                const collections = (window as any).require('WAWebCollections');
+                if (collections && collections.Chat) {
+                  const c = collections.Chat.get(gid);
                   if (c) return c.name || c.formattedTitle || null;
                 }
               } catch (_) {}
@@ -107,10 +107,10 @@ export async function handleMessage(client: any, msg: Message) {
 
       await prisma.group.upsert({
         where: { id: chat.id._serialized },
-        update: { name: groupName || 'Grup WA' },
+        update: { name: groupName || 'Grup WhatsApp' },
         create: {
           id: chat.id._serialized,
-          name: groupName || 'Grup WA',
+          name: groupName || 'Grup WhatsApp',
           status: true
         }
       });
@@ -188,7 +188,9 @@ export async function handleMessage(client: any, msg: Message) {
         // --- 3.2. Anti-Toxic / Bad-Word ---
         if (groupSettings.antiToxic || groupSettings.antiBadWord) {
           const lowerBody = bodyText.toLowerCase();
-          const containsToxic = TOXIC_WORDS.some(word => lowerBody.includes(word));
+          const rawBadWords = await getSetting('BAD_WORDS') || '';
+          const toxicWords = rawBadWords ? rawBadWords.split(',').map((w: string) => w.trim().toLowerCase()).filter(Boolean) : TOXIC_WORDS;
+          const containsToxic = toxicWords.some((word: string) => lowerBody.includes(word));
           if (containsToxic) {
             logger.warn(`Anti-Toxic triggered in group "${chat.name}" by user "${senderId}"`);
             logToDashboard('Security', `Anti-Toxic triggered in group ${chat.name} by ${senderId.split('@')[0]}`);
@@ -270,6 +272,21 @@ export async function handleMessage(client: any, msg: Message) {
     const args = commandParts;
 
     if (commandName) {
+      // Restrict general commands in groups, allowing only group administration commands
+      if (chat.isGroup) {
+        const cmdNameLower = commandName.toLowerCase();
+        const allowedGroupCommands = [
+          'addgroup', 'aktifkan', 'whitelist',
+          'kick', 'warn', 'warnings',
+          'mute', 'unmute', 'promote', 'demote',
+          'tagall', 'hidetag', 'rules'
+        ];
+        if (!allowedGroupCommands.includes(cmdNameLower)) {
+          await msg.reply('❌ Perintah ini hanya dapat digunakan melalui Private Chat dengan bot.');
+          return;
+        }
+      }
+
       try {
         await executeCommand(client, msg, chat, commandName, args, privileges);
       } catch (err) {

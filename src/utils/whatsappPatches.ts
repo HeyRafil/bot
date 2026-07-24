@@ -172,24 +172,32 @@ if (Client && Client.prototype) {
         try {
           const chatData = await this.pupPage.evaluate(async (jid: string) => {
             try {
-              const store = (window as any).Store;
-              if (store) {
-                let chatInstance = store.Chat ? store.Chat.get(jid) : null;
-                if (!chatInstance && store.Chat && typeof store.Chat.find === 'function') {
+              const collections = (window as any).require('WAWebCollections');
+              const widFactory = (window as any).require('WAWebWidFactory');
+              if (collections) {
+                let wid = null;
+                if (widFactory && typeof widFactory.createWid === 'function') {
+                  try { wid = widFactory.createWid(jid); } catch (_) {}
+                }
+
+                let chatInstance = collections.Chat ? collections.Chat.get(jid) : null;
+                if (!chatInstance && collections.Chat && typeof collections.Chat.find === 'function') {
                   try {
-                    chatInstance = await store.Chat.find(jid);
+                    chatInstance = await collections.Chat.find(jid);
                   } catch (_) {}
                 }
-                if (!chatInstance && store.Chat && typeof store.Chat.find === 'function') {
+                if (!chatInstance && collections.Chat && typeof collections.Chat.find === 'function') {
                   try {
-                    chatInstance = await store.Chat.find({ id: jid });
+                    chatInstance = await collections.Chat.find({ id: jid });
                   } catch (_) {}
                 }
                 // Try LID lookup if target is @lid
-                if (!chatInstance && store.LidUtils && jid.endsWith('@lid')) {
+                let lidUtils = null;
+                try { lidUtils = (window as any).require('WAWebLidUtils') || (window as any).require('LidUtils'); } catch (_) {}
+                if (!chatInstance && lidUtils && jid.endsWith('@lid')) {
                   try {
-                    const pnJid = typeof store.LidUtils.getCurrentLid === 'function' ? store.LidUtils.getCurrentLid(jid) : null;
-                    if (pnJid && store.Chat) chatInstance = store.Chat.get(pnJid);
+                    const pnJid = typeof lidUtils.getCurrentLid === 'function' ? lidUtils.getCurrentLid(jid) : null;
+                    if (pnJid && collections.Chat) chatInstance = collections.Chat.get(pnJid);
                   } catch (_) {}
                 }
                 if (chatInstance && (window as any).WWebJS) {
